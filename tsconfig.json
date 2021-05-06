@@ -19,7 +19,7 @@
     "mock/**/*",
     "src/**/*",
     "config/**/*",
-    ".umirc.ts",
+    ".umirc.tsx",
     "typings.d.ts"
   ],
   "exclude": [

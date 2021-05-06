@@ -1,4 +1,6 @@
 import { defineConfig } from 'umi';
+import { Avatar } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 
 export default defineConfig({
   nodeModulesTransform: {
@@ -12,4 +14,11 @@ export default defineConfig({
     { path: '/companies', component: '@/pages/companies', name: '关注的公司' },
   ],
   fastRefresh: {},
+  proxy: {
+    '/api': {
+      'target': 'http://localhost:8080/',
+      'changeOrigin': true,
+      'pathRewrite': { '^/api' : '' },
+    },
+  },
 });
