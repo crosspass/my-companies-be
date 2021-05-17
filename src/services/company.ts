@@ -12,6 +12,10 @@ export function remove(id: number) {
   });
 }
 
+export function fetchCompany(id: number) {
+  return request(`/api/companies/${id}`);
+}
+
 export function patch(id, values) {
   return request(`/api/companies/${id}`, {
     method: 'PATCH',

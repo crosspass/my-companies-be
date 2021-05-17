@@ -1,34 +1,38 @@
 import * as companyService from '../services/company'
+import pathToRegexp from 'path-to-regexp'
+
+// type interface Company {
+// }
 
 export default {
   namespace: 'company',
   state: {
-    list: []
+    current: null
   },
   effects: {
-    *fetch({ payload: { page = 1 } }, { call, put }) {
-      const { companies, message } = yield call(companyService.fetch, { page });
+    *fetch({ payload: id }, { call, put }) {
+      console.log('id', id);
+      const { company, message } = yield call(companyService.fetchCompany, id);
       yield put({
-        type: 'fetchCompanies',
-        payload: {
-          companies,
-          page: page
-        },
+        type: 'fetchCompany',
+        payload: { company },
       });
     },
   },
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
-        if (pathname === '/companies') {
-          dispatch({ type: 'fetch', payload: query });
+        const match = pathToRegexp('/companies/:id').exec(pathname);
+        if (match) {
+          const companyId = match[1];
+          dispatch({ type: 'fetch', payload: companyId });
         }
       });
     },
   },
   reducers: {
-    fetchCompanies(state, { payload }) {
-      return { ...state, list: payload.companies };
+    fetchCompany(state, { payload }) {
+      return { ...state, current: payload.company };
     },
   },
 }

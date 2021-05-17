@@ -12,6 +12,7 @@ export default defineConfig({
   routes: [
     { path: '/', component: '@/pages/index' },
     { path: '/companies', component: '@/pages/companies', name: '关注的公司' },
+    { path: '/companies/:id', component: '@/pages/company' },
   ],
   fastRefresh: {},
   proxy: {

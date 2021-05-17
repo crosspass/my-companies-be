@@ -1,12 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
-import styles from './companies.css';
+import { Link } from 'dva/router';
 
 function Item ({company}) {
    return (
-     <div>
-       <p>{company.Name}</p>
-     </div>
+      <Link  to={`/companies/${company.ID}`}>{company.Name}</Link>
    )
 }
 
@@ -23,7 +21,7 @@ function Page({companies}) {
 function mapStateToProps(state, ownProps) {
   return {
     loading: state.loading.global,
-    companies: state.company.list,
+    companies: state.companies.list,
   };
 }
 
