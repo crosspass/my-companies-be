@@ -7,7 +7,8 @@ import pathToRegexp from 'path-to-regexp'
 export default {
   namespace: 'company',
   state: {
-    current: null
+    current: null,
+    comments: [],
   },
   effects: {
     *fetch({ payload: id }, { call, put }) {
@@ -15,6 +16,14 @@ export default {
       const { company, message } = yield call(companyService.fetchCompany, id);
       yield put({
         type: 'fetchCompany',
+        payload: { company },
+      });
+    },
+    *createComment({payload: values}, { call, put }) {
+      console.log('payload', values);
+      const { company, message } = yield call(companyService.createComment, values);
+      yield put({
+        type: 'addComment',
         payload: { company },
       });
     },
@@ -33,6 +42,9 @@ export default {
   reducers: {
     fetchCompany(state, { payload }) {
       return { ...state, current: payload.company };
+    },
+    addComment(state, { payload }) {
+      return { ...state, comments: payload };
     },
   },
 }

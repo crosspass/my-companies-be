@@ -16,6 +16,13 @@ export function fetchCompany(id: number) {
   return request(`/api/companies/${id}`);
 }
 
+export function createComment(payload) {
+  return request(`/api/comments`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
 export function patch(id, values) {
   return request(`/api/companies/${id}`, {
     method: 'PATCH',
