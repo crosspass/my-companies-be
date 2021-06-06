@@ -16,6 +16,10 @@ export function fetchCompany(id: number) {
   return request(`/api/companies/${id}`);
 }
 
+export function reportSummaries(code: string) {
+  return request(`/api/reportSummary?code=${code}`);
+}
+
 export function createComment(payload) {
   return request(`/api/comments`, {
     method: 'POST',

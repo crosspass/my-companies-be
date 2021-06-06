@@ -4,7 +4,7 @@ import { Link } from 'dva/router';
 
 function Item ({company}) {
    return (
-      <Link  to={`/companies/${company.ID}`}>{company.Name}</Link>
+      <Link  to={`/companies/${company.Code}`}>{company.Name}</Link>
    )
 }
 
@@ -13,7 +13,7 @@ function Page({companies}) {
   return (
     <div>
       <h1>Page companies</h1>
-      { companies.map(company => <Item key={company.ID} company={company}></Item>) }
+      { companies.map(company => <Item key={company.Code} company={company}></Item>) }
     </div>
   );
 }
