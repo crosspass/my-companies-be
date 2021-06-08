@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'dva';
 import { Link } from 'dva/router';
 
 // import the core library.
@@ -24,10 +23,6 @@ import {
 } from 'echarts/renderers';
 
 import { Modal, Button, Form, Input } from 'antd';
-
-import styles from './index.less';
-import Income from '../components/income';
-import Summary from '../components/summary';
 
 const App = ({dispatch, companyId, chart}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -732,34 +727,16 @@ function FinaRisk({ reportSummary }) {
   )
 }
 
-function Page({ dispatch, company }) {
-  console.log('company', company)
-  const { current } = company
-  if (!company) {
-    return null;
-  }
-  const getChartComments = (chartName:string) => {
-    if (company && company.Comments) {
-      return company.Comments.filter(v => v.Chart == chartName )
-    } else {
-      return []
-    }
-  }
+export default function Summary({ summary }) {
+  console.log('company', summary)
   return (
-    <div className={styles.mainContainer}>
-      <h1>{current && current.Name}</h1>
-      <Summary summary={company.reportSummaries} />
-      <Income incomes={company.incomes} />
+    <div>
+      {/* <App dispatch={dispatch} companyId={company.ID} chart="Profit"/> */}
+      <TotalRevenue reportSummary={summary}/>
+      <Increase reportSummary={summary}/>
+      <ProfitAbility reportSummary={summary}/>
+      <OperationAbility reportSummary={summary}/>
+      <FinaRisk reportSummary={summary}/>
     </div>
   );
 }
-
-function mapStateToProps(state, ownProps) {
-  console.log('state.company', state.company)
-  return {
-    loading: state.loading.global,
-    company: state.company
-  };
-}
-
-export default connect(mapStateToProps)(Page);

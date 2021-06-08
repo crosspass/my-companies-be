@@ -20,6 +20,10 @@ export function reportSummaries(code: string) {
   return request(`/api/reportSummary?code=${code}`);
 }
 
+export function incomes(code: string) {
+  return request(`/api/incomes?code=${code}`);
+}
+
 export function createComment(payload) {
   return request(`/api/comments`, {
     method: 'POST',
