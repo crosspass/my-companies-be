@@ -28,6 +28,13 @@ import { Modal, Button, Form, Input } from 'antd';
 import styles from './index.less';
 import Income from '../components/income';
 import Summary from '../components/summary';
+import CashFlow from '../components/cash_flow';
+
+// Register the required components
+echarts.use(
+  [TitleComponent, TooltipComponent, GridComponent, LegendPlainComponent, LineChart, CanvasRenderer]
+);
+
 
 const App = ({dispatch, companyId, chart}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -73,11 +80,6 @@ const App = ({dispatch, companyId, chart}) => {
     </>
   );
 };
-
-// Register the required components
-echarts.use(
-  [TitleComponent, TooltipComponent, GridComponent, LegendPlainComponent, LineChart, CanvasRenderer]
-);
 
 // The usage of ReactEChartsCore are same with above.
 
@@ -750,6 +752,7 @@ function Page({ dispatch, company }) {
       <h1>{current && current.Name}</h1>
       <Summary summary={company.reportSummaries} />
       <Income incomes={company.incomes} />
+      <CashFlow cashFlows={company.cashFlows} />
     </div>
   );
 }

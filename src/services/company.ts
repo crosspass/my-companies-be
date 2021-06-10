@@ -24,6 +24,10 @@ export function incomes(code: string) {
   return request(`/api/incomes?code=${code}`);
 }
 
+export function cash_flows(code: string) {
+  return request(`/api/cashFlows?code=${code}`);
+}
+
 export function createComment(payload) {
   return request(`/api/comments`, {
     method: 'POST',
