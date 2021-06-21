@@ -28,6 +28,10 @@ export function cash_flows(code: string) {
   return request(`/api/cashFlows?code=${code}`);
 }
 
+export function balances(code: string) {
+  return request(`/api/balances?code=${code}`);
+}
+
 export function createComment(payload) {
   return request(`/api/comments`, {
     method: 'POST',

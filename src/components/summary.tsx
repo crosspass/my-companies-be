@@ -398,12 +398,15 @@ function Increase({ reportSummary }) {
 
 function ProfitAbility({ reportSummary }) {
   console.log('comments', reportSummary);
-  const annual_summary = reportSummary.filter(summary => {
-    return summary.ReportName.includes('年')
-  })
+  if (!reportSummary) {
+    return null;
+  }
   if (reportSummary.length == 0) {
     return null;
   }
+  const annual_summary = reportSummary.filter(summary => {
+    return summary.ReportName.includes('年')
+  })
   const option = {
     title: {
       text: '盈利能力'

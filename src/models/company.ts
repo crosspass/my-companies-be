@@ -12,6 +12,7 @@ export default {
     reportSummaries: [],
     incomes: [],
     cashFlows: [],
+    balances: [],
   },
   effects: {
     *fetch({ payload: code }, { call, put }) {
@@ -53,6 +54,14 @@ export default {
         payload: { cashFlows },
       });
     },
+    *fetchBalances({payload: code}, { call, put }) {
+      const { balances, message } = yield call(companyService.balances, code);
+      console.log('fetch report summaries payload', code);
+      yield put({
+        type: 'addBalances',
+        payload: { balances },
+      });
+    },
   },
   subscriptions: {
     setup({ dispatch, history }) {
@@ -64,6 +73,7 @@ export default {
           dispatch({ type: 'fetchReportSummaries', payload: code });
           dispatch({ type: 'fetchIncomes', payload: code });
           dispatch({ type: 'fetchCashFlows', payload: code });
+          dispatch({ type: 'fetchBalances', payload: code });
         }
       });
     },
@@ -83,6 +93,9 @@ export default {
     },
     addCashFlows(state, { payload }) {
       return { ...state, cashFlows: payload.cashFlows };
+    },
+    addBalances(state, { payload }) {
+      return { ...state, balances: payload.balances };
     },
   },
 }
