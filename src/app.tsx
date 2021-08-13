@@ -9,6 +9,8 @@ export const layout = ({
 }: {
   initialState: { settings?: LayoutSettings; currentUser?: null };
 }): BasicLayoutProps => {
+  console.log('initialState', initialState)
+  const pure = location.pathname == '/login'
   return {
      rightContentRender: () => <h2>Welcome</h2>,
     // onPageChange: () => {
@@ -19,6 +21,7 @@ export const layout = ({
     //     history.push('/user/login');
     //   }
     // },
+    pure: pure,
     menuHeaderRender: undefined,
     ...initialState?.settings,
   };
