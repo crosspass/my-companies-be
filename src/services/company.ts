@@ -1,4 +1,4 @@
-import request from 'umi-request';
+import { request } from 'umi';
 
 import { PAGE_SIZE } from '../constants';
 

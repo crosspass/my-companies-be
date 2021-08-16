@@ -9,9 +9,10 @@ export default defineConfig({
   },
   routes: [
     { path: '/', component: '@/pages/index' },
+    { path: '/login', component: '@/pages/login' },
     { path: '/companies', component: '@/pages/companies', name: '关注的公司' },
     { path: '/companies/:id', component: '@/pages/company' },
-    { path: '/login', component: '@/pages/login' },
+    { path: '/articles/new', component: '@/pages/new_article' },
   ],
   fastRefresh: {},
   proxy: {

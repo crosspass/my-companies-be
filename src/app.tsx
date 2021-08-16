@@ -4,6 +4,11 @@ import {
   Settings as LayoutSettings,
 } from '@ant-design/pro-layout';
 
+import { RequestOptionsInit } from 'umi-request';
+import { RequestConfig } from 'umi';
+
+import { getToken } from "@/utils/localdb"
+
 export const layout = ({
   initialState,
 }: {
@@ -12,7 +17,7 @@ export const layout = ({
   console.log('initialState', initialState)
   const pure = location.pathname == '/login'
   return {
-     rightContentRender: () => <h2>Welcome</h2>,
+    rightContentRender: () => <h2>Welcome</h2>,
     // onPageChange: () => {
     //   const { currentUser } = initialState;
     //   const { location } = history;
@@ -25,4 +30,22 @@ export const layout = ({
     menuHeaderRender: undefined,
     ...initialState?.settings,
   };
+};
+
+const addToken = (url: string, options: RequestOptionsInit) => {
+  const token = getToken();
+  console.log("addToken", token)
+  const headers = {
+    'Token': `${token}`
+  };
+  return (
+    {
+      url,
+      options: { ...options, headers },
+    }
+  );
+}
+
+export const request: RequestConfig = {
+  requestInterceptors: [addToken],
 };

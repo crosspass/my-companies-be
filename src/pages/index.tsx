@@ -1,6 +1,9 @@
 import React from 'react';
 import { Button, Card, List, Timeline, Row, Col } from 'antd';
+import { history } from 'umi';
+
 import styles from './index.less';
+import { PlusOutlined } from '@ant-design/icons';
 import Month from '@/components/month';
 
 // 项目的目的： 提升个人投资者的价值投资能力
@@ -45,7 +48,7 @@ interface Article {
 function ArticleCard(article:Article) {
   const title = `${article.title} ${article.created_at}`
   return (
-    <Card title={title} className={styles.articleCard}>
+    <Card title={title} className={styles.articleCard} extra={<a href="#">详情</a>} >
       <article className="film_review">
         <header>
           <p>
@@ -55,6 +58,10 @@ function ArticleCard(article:Article) {
       </article>
     </Card>
   )
+}
+
+function goNewArticle() {
+  history.push('/articles/new')
 }
 
 export default function IndexPage() {
@@ -84,9 +91,9 @@ export default function IndexPage() {
             <Timeline.Item><Button>2019</Button></Timeline.Item>
             <Timeline.Item><Button>2018</Button></Timeline.Item>
           </Timeline>
+          <Button className={styles.addBtn} type="primary" shape="circle" icon={<PlusOutlined />} onClick={goNewArticle}/>
         </Col>
       </Row>
-
     </div>
   );
 }
