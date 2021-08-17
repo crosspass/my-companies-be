@@ -1,10 +1,13 @@
 import React from 'react';
 import { Button, Card, List, Timeline, Row, Col } from 'antd';
-import { history } from 'umi';
+import { history, Link } from 'umi';
+import { connect } from 'dva';
+import 'braft-editor/dist/output.css'
 
 import styles from './index.less';
 import { PlusOutlined } from '@ant-design/icons';
 import Month from '@/components/month';
+import {dateString} from "@/utils/dates"
 
 // 项目的目的： 提升个人投资者的价值投资能力
 // 个人投资者真的知道企业的生意
@@ -16,45 +19,28 @@ import Month from '@/components/month';
 // 企业月度关键数据记录, 生成图表展示?
 // 跟踪企业的商业数据
 // 用户关注企业   用户  N: ----- :N 企业
-const articles = [
-  {
-    title: '光线传媒投资分析',
-    created_at: '2021.08.01',
-    summary: '光线传媒在 2021 年预计排片： 《阳光姐妹淘》 《革命者》 《坚如磐石》 《狙击手》《5个扑水少年》'
-  },
-  {
-    title: '光线传媒投资分析',
-    created_at: '2021.08.01',
-    summary: '光线传媒在 2021 年预计排片： 《阳光姐妹淘》 《革命者》 《坚如磐石》 《狙击手》《5个扑水少年》'
-  },
-  {
-    title: '光线传媒投资分析',
-    created_at: '2021.08.01',
-    summary: '光线传媒在 2021 年预计排片： 《阳光姐妹淘》 《革命者》 《坚如磐石》 《狙击手》《5个扑水少年》'
-  },
-  {
-    title: '光线传媒投资分析',
-    created_at: '2021.08.01',
-    summary: '光线传媒在 2021 年预计排片： 《阳光姐妹淘》 《革命者》 《坚如磐石》 《狙击手》《5个扑水少年》'
-  },
-]
 
 interface Article {
-  title: string,
-  created_at: string,
+  ID: number,
+  Content: string,
+  CreatedAt: string,
   summary: string,
 }
 
+function title(content:string):string{
+  const match = content.match(/>([^<]+?)</)
+  if (match) {
+    return match[1]
+  }
+  return ""
+}
+
 function ArticleCard(article:Article) {
-  const title = `${article.title} ${article.created_at}`
+  const ctitle = `${title(article.Content)} ${dateString(article.CreatedAt)}`
   return (
-    <Card title={title} className={styles.articleCard} extra={<a href="#">详情</a>} >
-      <article className="film_review">
-        <header>
-          <p>
-            {article.summary}
-          </p>
-        </header>
+    <Card title={ctitle} className={styles.articleCard} extra={<Link to={`/articles/${article.ID}`}>详情</Link>} >
+      <article>
+        <div className="braft-output-content" dangerouslySetInnerHTML={{__html: article.Content.substr(0, 100)+"..."}}></div>
       </article>
     </Card>
   )
@@ -64,10 +50,10 @@ function goNewArticle() {
   history.push('/articles/new')
 }
 
-export default function IndexPage() {
+function IndexPage({articles}) {
+  console.log("articles", articles)
   return (
     <div className={styles.mainContainer}>
-      <h1 className={styles.title}>Page index</h1>
       {/* <-- 写点什么 --!> */}
       {/* 最近 12 个月的笔记 */}
 
@@ -78,7 +64,7 @@ export default function IndexPage() {
             <List
             size="large"
             split={false}
-            dataSource={articles}
+            dataSource={articles.list}
             renderItem={ArticleCard}
             >
             </List>
@@ -97,3 +83,11 @@ export default function IndexPage() {
     </div>
   );
 }
+
+function mapStateToProps(state) {
+  return {
+    articles: state.articles
+  };
+}
+
+export default connect(mapStateToProps)(IndexPage);

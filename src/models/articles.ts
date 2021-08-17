@@ -6,14 +6,12 @@ export default {
     list: []
   },
   effects: {
-    *fetch({ payload: { page = 1 } }, { call, put }) {
-      const { companies, message } = yield call(articleService.fetch, { page });
+    *fetch({ payload: values }, { call, put }) {
+      const { articles, message } = yield call(articleService.fetch, values);
+      console.log('response articles', articles)
       yield put({
-        type: 'fetchCompanies',
-        payload: {
-          companies,
-          page: page
-        },
+        type: 'fetchArticles',
+        payload: articles,
       });
     },
     *save({ payload: values }, { call }) {
@@ -23,15 +21,17 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
-        if (pathname === '/companies') {
-          dispatch({ type: 'fetch', payload: query });
+        if (pathname === '/') {
+          const year = new Date().getFullYear()
+          const payload = { page: 0, year: `${year}`}
+          dispatch({ type: 'fetch', payload });
         }
       });
     },
   },
   reducers: {
-    fetchCompanies(state, { payload }) {
-      return { ...state, list: payload.companies };
+    fetchArticles(state, { payload }) {
+      return { ...state, list: payload };
     },
   },
 }
