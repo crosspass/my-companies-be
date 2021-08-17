@@ -16,3 +16,7 @@ interface fetchParams {
 export function fetch(payload: fetchParams) {
   return request(`/api/articles?page=${payload.page}&year=${payload.year}`);
 }
+
+export function fetchOne(articleID:number) {
+  return request(`/api/articles/${articleID}`);
+}

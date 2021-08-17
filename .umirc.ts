@@ -13,6 +13,7 @@ export default defineConfig({
     { path: '/companies', component: '@/pages/companies', name: '关注的公司' },
     { path: '/companies/:id', component: '@/pages/company' },
     { path: '/articles/new', component: '@/pages/new_article' },
+    { path: '/articles/:id', component: '@/pages/article' },
   ],
   fastRefresh: {},
   proxy: {
