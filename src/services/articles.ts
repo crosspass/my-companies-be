@@ -1,10 +1,10 @@
 import { request } from 'umi';
 
 
-export function save(article: string) {
+export function save(article) {
   return request(`/api/articles`, {
     method: 'POST',
-    body: JSON.stringify({content: article}),
+    body: JSON.stringify(article),
   });
 }
 

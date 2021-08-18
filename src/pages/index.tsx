@@ -1,5 +1,7 @@
 import React from 'react';
-import { Button, Card, List, Timeline, Row, Col } from 'antd';
+import { Button, Card, List, Timeline, Row, Col, Menu, Dropdown } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+
 import { history, Link } from 'umi';
 import { connect } from 'dva';
 import 'braft-editor/dist/output.css'
@@ -7,7 +9,7 @@ import 'braft-editor/dist/output.css'
 import styles from './index.less';
 import { PlusOutlined } from '@ant-design/icons';
 import Month from '@/components/month';
-import {dateString} from "@/utils/dates"
+import { dateString } from "@/utils/dates"
 
 // 项目的目的： 提升个人投资者的价值投资能力
 // 个人投资者真的知道企业的生意
@@ -27,7 +29,7 @@ interface Article {
   summary: string,
 }
 
-function title(content:string):string{
+function title(content: string): string {
   const match = content.match(/>([^<]+?)</)
   if (match) {
     return match[1]
@@ -35,12 +37,30 @@ function title(content:string):string{
   return ""
 }
 
-function ArticleCard(article:Article) {
+
+function ArticleCard(article: Article) {
+  const menu = (
+    <Menu>
+      <Menu.Item>
+        <Link to={`/articles/${article.ID}/edit`}>编辑</Link>
+      </Menu.Item>
+      <Menu.Item danger>删除</Menu.Item>
+    </Menu>
+  );
+  const dropdown = (
+    <Dropdown overlay={menu}>
+      <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+        操作 <DownOutlined />
+      </a>
+    </Dropdown>
+  )
+
   const ctitle = `${title(article.Content)} ${dateString(article.CreatedAt)}`
   return (
-    <Card title={ctitle} className={styles.articleCard} extra={<Link to={`/articles/${article.ID}`}>详情</Link>} >
+    <Card title={ctitle} className={styles.articleCard} extra={dropdown} >
       <article>
-        <div className="braft-output-content" dangerouslySetInnerHTML={{__html: article.Content.substr(0, 100)+"..."}}></div>
+        <div className="braft-output-content" dangerouslySetInnerHTML={{ __html: article.Content.substr(0, 100) + "..." }}></div>
+        <Link to={`/articles/${article.ID}`}>详情</Link>
       </article>
     </Card>
   )
@@ -50,7 +70,7 @@ function goNewArticle() {
   history.push('/articles/new')
 }
 
-function IndexPage({articles}) {
+function IndexPage({ articles }) {
   console.log("articles", articles)
   return (
     <div className={styles.mainContainer}>
@@ -62,10 +82,10 @@ function IndexPage({articles}) {
           <Month />
           <section>
             <List
-            size="large"
-            split={false}
-            dataSource={articles.list}
-            renderItem={ArticleCard}
+              size="large"
+              split={false}
+              dataSource={articles.list}
+              renderItem={ArticleCard}
             >
             </List>
           </section>
@@ -77,7 +97,7 @@ function IndexPage({articles}) {
             <Timeline.Item><Button>2019</Button></Timeline.Item>
             <Timeline.Item><Button>2018</Button></Timeline.Item>
           </Timeline>
-          <Button className={styles.addBtn} type="primary" shape="circle" icon={<PlusOutlined />} onClick={goNewArticle}/>
+          <Button className={styles.addBtn} type="primary" shape="circle" icon={<PlusOutlined />} onClick={goNewArticle} />
         </Col>
       </Row>
     </div>

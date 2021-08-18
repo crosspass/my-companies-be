@@ -11,7 +11,7 @@ function Page({ dispatch, article }) {
     <div className={styles.mainContainer}>
       <article>
         {article &&
-          <div className="braft-output-content" dangerouslySetInnerHTML={{ __html: article.Content.substr(0, 100) + "..." }}></div>
+          <div className="braft-output-content" dangerouslySetInnerHTML={{ __html: article.Content }}></div>
         }
       </article>
     </div>
@@ -19,7 +19,6 @@ function Page({ dispatch, article }) {
 }
 
 function mapStateToProps(state, ownProps) {
-  console.log('state.company', state.company)
   return {
     article: state.articles.current
   };

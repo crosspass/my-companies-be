@@ -17,9 +17,10 @@ function NewArticle({ dispatch }) {
   const [editorState, updateEditorState] = useState(BraftEditor.createEditorState(null))
   const saveArticle = () => {
     const htmlContent = editorState.toHTML()
+    const rawContent = editorState.toRAW()
     dispatch({
       type: "articles/save",
-      payload: htmlContent,
+      payload: { htmlContent, rawContent }
     })
   }
   return (
