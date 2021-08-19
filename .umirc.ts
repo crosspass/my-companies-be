@@ -14,6 +14,7 @@ export default defineConfig({
     { path: '/companies/:id', component: '@/pages/company' },
     { path: '/articles/new', component: '@/pages/new_article' },
     { path: '/articles/:id', component: '@/pages/article' },
+    { path: '/articles/:id/edit', component: '@/pages/edit_article' },
   ],
   fastRefresh: {},
   proxy: {

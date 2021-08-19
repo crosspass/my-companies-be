@@ -27,6 +27,9 @@ export default {
     *save({ payload }, { call }) {
       const { article, message } = yield call(articleService.save, payload);
     },
+    *update({ payload }, { call }) {
+      const { article, message } = yield call(articleService.update, payload);
+    },
   },
   subscriptions: {
     setup({ dispatch, history }) {
@@ -36,7 +39,7 @@ export default {
           const payload = { page: 0, year: `${year}`}
           dispatch({ type: 'fetch', payload });
         }
-        const match = pathToRegexp('/articles/:id').exec(pathname);
+        const match = pathToRegexp('/articles/:id').exec(pathname) || pathToRegexp('/articles/:id/edit').exec(pathname);
         if (match) {
           const articleID = match[1];
           dispatch({ type: 'fetchOne', articleID });
@@ -49,6 +52,9 @@ export default {
       return { ...state, list: payload };
     },
     fetchArticle(state, { payload }) {
+      return { ...state, current: payload };
+    },
+    updateContent(state, { payload }) {
       return { ...state, current: payload };
     },
   },

@@ -8,6 +8,13 @@ export function save(article) {
   });
 }
 
+export function update(article) {
+  return request(`/api/articles/${article.ID}`, {
+    method: 'PUT',
+    body: JSON.stringify(article),
+  });
+}
+
 interface fetchParams {
   page: number;
   year: string
