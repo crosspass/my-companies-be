@@ -15,6 +15,12 @@ export function update(article) {
   });
 }
 
+export function markDeleted(articleID:number) {
+  return request(`/api/articles/${articleID}`, {
+    method: 'DELETE',
+  });
+}
+
 interface fetchParams {
   page: number;
   year: string

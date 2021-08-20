@@ -1,5 +1,6 @@
 import * as articleService from '../services/articles'
 import pathToRegexp from 'path-to-regexp'
+import _ from 'lodash'
 
 export default {
   namespace: 'articles',
@@ -30,6 +31,15 @@ export default {
     *update({ payload }, { call }) {
       const { article, message } = yield call(articleService.update, payload);
     },
+    *delete({ payload }, { call, put }) {
+      const { article, message } = yield call(articleService.markDeleted, payload);
+      if (message == 'ok') {
+        yield put({
+          type: "deleteArticle",
+          payload: payload
+        })
+      }
+    },
   },
   subscriptions: {
     setup({ dispatch, history }) {
@@ -56,6 +66,10 @@ export default {
     },
     updateContent(state, { payload }) {
       return { ...state, current: payload };
+    },
+    deleteArticle(state, { payload }) {
+      const filteredList = _.filter(state.list, v => (v.ID != payload))
+      return { ...state, list: filteredList }
     },
   },
 }
