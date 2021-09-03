@@ -11,7 +11,7 @@ export default defineConfig({
     { path: '/', component: '@/pages/index' },
     { path: '/login', component: '@/pages/login' },
     { path: '/companies', component: '@/pages/companies', name: '关注的公司' },
-    { path: '/companies/:id', component: '@/pages/company' },
+    { path: '/companies/:code', component: '@/pages/company' },
     { path: '/articles/new', component: '@/pages/new_article' },
     { path: '/articles/:id', component: '@/pages/article' },
     { path: '/articles/:id/edit', component: '@/pages/edit_article' },

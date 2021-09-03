@@ -1,4 +1,5 @@
 import * as companyService from '../services/company'
+import * as userService from '../services/user'
 
 export default {
   namespace: 'companies',
@@ -16,6 +17,13 @@ export default {
         },
       });
     },
+    *star({ payload }, { call, put }) {
+      const { company, message } = yield call(userService.starCompany, payload);
+      yield put({
+        type: 'starCompany',
+        payload: company
+      });
+    },
   },
   subscriptions: {
     setup({ dispatch, history }) {
@@ -29,6 +37,9 @@ export default {
   reducers: {
     fetchCompanies(state, { payload }) {
       return { ...state, list: payload.companies };
+    },
+    starCompany(state, { payload }) {
+      return { ...state, list: [...state.list, payload] };
     },
   },
 }

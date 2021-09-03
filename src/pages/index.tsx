@@ -114,9 +114,9 @@ function IndexPage({ articles, dispatch }) {
             <Timeline.Item><Button>2019</Button></Timeline.Item>
             <Timeline.Item><Button>2018</Button></Timeline.Item>
           </Timeline>
-          <Button className={styles.addBtn} type="primary" shape="circle" icon={<PlusOutlined />} onClick={goNewArticle} />
         </Col>
       </Row>
+      <Button className={styles.addBtn} type="primary" shape="circle" icon={<PlusOutlined />} onClick={goNewArticle} />
     </div>
   );
 }

@@ -14,3 +14,10 @@ export function register(values) {
     body: JSON.stringify(values),
   });
 }
+
+export function starCompany(values) {
+  return request('/api/users/starCompany', {
+    method: 'POST',
+    body: JSON.stringify(values),
+  });
+}
