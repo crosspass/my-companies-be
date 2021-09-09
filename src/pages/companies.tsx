@@ -116,7 +116,7 @@ function IndexPage({ companies, dispatch }) {
               <Space>
                 <FundTwoTone />
                 <Tooltip title="跟踪数据">
-                  <Link to={`/companies/${company.ID}/csvs`}>5</Link>
+                  <Link to={`/companies/${company.Code}/csvs`}>5</Link>
                 </Tooltip>
               </Space>
             </Col>

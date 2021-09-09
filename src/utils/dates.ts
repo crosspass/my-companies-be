@@ -35,5 +35,5 @@ export function weeks(year: string, month: string): Array<Array<moment.Moment>> 
 }
 
 export function dateString(date:string):string {
-  return moment(date).format("YYYY-MM-DD")
+  return moment(date).format("YYYY.MM.DD")
 }

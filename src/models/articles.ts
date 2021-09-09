@@ -7,6 +7,8 @@ export default {
   state: {
     list: [],
     current: null,
+    stats: [],
+    year: new Date().getFullYear()
   },
   effects: {
     *fetch({ payload }, { call, put }) {
@@ -15,6 +17,14 @@ export default {
       yield put({
         type: 'fetchArticles',
         payload: articles,
+      });
+    },
+    *stats({ year }: {year: string}, { call, put }) {
+      const { stats, message } = yield call(articleService.stats, year);
+      console.log('response stats', stats)
+      yield put({
+        type: 'setStats',
+        payload: stats,
       });
     },
     *fetchOne({ articleID }, { call, put }) {
@@ -46,10 +56,11 @@ export default {
       return history.listen(({ pathname, query }) => {
         if (pathname === '/') {
           const year = new Date().getFullYear()
-          const payload = { page: 0, year: `${year}`}
+          const payload = { page: 0, year: `${year}` }
           dispatch({ type: 'fetch', payload });
+          dispatch({ type: 'stats', year });
         }
-        const match = pathToRegexp('/articles/:id').exec(pathname) || pathToRegexp('/articles/:id/edit').exec(pathname);
+        const match = pathToRegexp('/articles/:id').exec(pathname);
         if (match) {
           const articleID = match[1];
           dispatch({ type: 'fetchOne', articleID });
@@ -71,5 +82,8 @@ export default {
       const filteredList = _.filter(state.list, v => (v.ID != payload))
       return { ...state, list: filteredList }
     },
+    setStats(state, { payload }) {
+      return { ...state, stats: payload }
+    }
   },
 }

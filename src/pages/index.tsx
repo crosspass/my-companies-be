@@ -89,6 +89,7 @@ function IndexPage({ articles, dispatch }) {
   }
 
   console.log("articles", articles)
+  console.log("articles.stats", articles.stats)
   return (
     <div className={styles.mainContainer}>
       {/* <-- 写点什么 --!> */}
@@ -96,7 +97,7 @@ function IndexPage({ articles, dispatch }) {
 
       <Row>
         <Col span={18}>
-          <Month />
+          <Month year={articles.year} stats={articles.stats}/>
           <section>
             <List
               size="large"

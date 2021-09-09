@@ -30,6 +30,10 @@ export function fetch(payload: fetchParams) {
   return request(`/api/articles?page=${payload.page}&year=${payload.year}`);
 }
 
+export function stats(year:string) {
+  return request(`/api/article/stats?year=${year}`);
+}
+
 export function fetchOne(articleID:number) {
   return request(`/api/articles/${articleID}`);
 }

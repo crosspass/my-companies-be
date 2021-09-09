@@ -6,6 +6,9 @@ import { Modal, Button, Form, Input } from 'antd';
 
 import styles from './index.less';
 
+{/* 多种投资笔记的通用模式: 时间流模式 */}
+{/* 时间流模式的笔记： 2018 年公司的经营情况......... */}
+{/* 时间流模式的笔记： 2019 年公司的经营情况......... */}
 function Page({ dispatch, article }) {
   return (
     <div className={styles.mainContainer}>
