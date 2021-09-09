@@ -64,7 +64,7 @@ export default {
           dispatch({ type: 'fetch', payload });
           dispatch({ type: 'stats', year });
         }
-        const match = pathToRegexp('/articles/:id').exec(pathname);
+        const match = pathToRegexp('/articles/:id').exec(pathname) || pathToRegexp('/articles/:id/edit').exec(pathname);
         if (match) {
           const articleID = match[1];
           dispatch({ type: 'fetchOne', articleID });
