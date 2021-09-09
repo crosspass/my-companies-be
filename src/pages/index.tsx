@@ -88,8 +88,22 @@ function IndexPage({ articles, dispatch }) {
     )
   }
 
-  console.log("articles", articles)
-  console.log("articles.stats", articles.stats)
+  const changeYear = (year:string) => {
+    dispatch({
+      type: 'articles/fetch',
+      payload: { page: 0, year: year }
+    })
+    dispatch({
+      type: 'articles/stats',
+      year
+    })
+  }
+
+  const years = []
+  const currentYear = new Date().getFullYear()
+  for (let i = currentYear; i >= 2021; i--) {
+    years.push(i)
+  }
   return (
     <div className={styles.mainContainer}>
       {/* <-- 写点什么 --!> */}
@@ -97,7 +111,7 @@ function IndexPage({ articles, dispatch }) {
 
       <Row>
         <Col span={18}>
-          <Month year={articles.year} stats={articles.stats}/>
+          <Month year={articles.year} stats={articles.stats} />
           <section>
             <List
               size="large"
@@ -110,10 +124,11 @@ function IndexPage({ articles, dispatch }) {
         </Col>
         <Col span={6}>
           <Timeline className={styles.timeline} >
-            <Timeline.Item><Button type="primary">2021</Button></Timeline.Item>
-            <Timeline.Item><Button>2020</Button></Timeline.Item>
-            <Timeline.Item><Button>2019</Button></Timeline.Item>
-            <Timeline.Item><Button>2018</Button></Timeline.Item>
+            {years.map(year => {
+              return (
+                <Timeline.Item><Button type={year == articles.year ? "primary" : "default"} onClick={() => changeYear(year)}>{year}</Button></Timeline.Item>
+              )
+            })}
           </Timeline>
         </Col>
       </Row>

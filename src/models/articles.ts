@@ -15,6 +15,10 @@ export default {
       const { articles, message } = yield call(articleService.fetch, payload);
       console.log('response articles', articles)
       yield put({
+        type: 'setYear',
+        payload: payload.year,
+      });
+      yield put({
         type: 'fetchArticles',
         payload: articles,
       });
@@ -24,7 +28,7 @@ export default {
       console.log('response stats', stats)
       yield put({
         type: 'setStats',
-        payload: stats,
+        payload: stats || [],
       });
     },
     *fetchOne({ articleID }, { call, put }) {
@@ -84,6 +88,9 @@ export default {
     },
     setStats(state, { payload }) {
       return { ...state, stats: payload }
-    }
+    },
+    setYear(state, { payload }) {
+      return { ...state, year: payload }
+    },
   },
 }
