@@ -9,6 +9,8 @@ import {
 } from 'echarts/charts';
 // import components, all suffixed with Component
 
+import styles from "@/pages/index.less"
+
 export default function CashFlows({ cashFlows }) {
   const annual_income = cashFlows.filter(cashflow => {
     return cashflow.ReportName.includes('年')
@@ -36,7 +38,7 @@ export default function CashFlows({ cashFlows }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_income.map(v => v.ReportName.substr(0,4))
+      data: annual_income.map(v => v.ReportName.substr(0, 4))
     },
     yAxis: {
       type: 'value'
@@ -104,7 +106,7 @@ export default function CashFlows({ cashFlows }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_income.map(v => v.ReportName.substr(0,4))
+      data: annual_income.map(v => v.ReportName.substr(0, 4))
     },
     yAxis: {
       type: 'value'
@@ -183,7 +185,7 @@ export default function CashFlows({ cashFlows }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_income.map(v => v.ReportName.substr(0,4))
+      data: annual_income.map(v => v.ReportName.substr(0, 4))
     },
     yAxis: {
       type: 'value'
@@ -251,7 +253,7 @@ export default function CashFlows({ cashFlows }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_income.map(v => v.ReportName.substr(0,4))
+      data: annual_income.map(v => v.ReportName.substr(0, 4))
     },
     yAxis: {
       type: 'value'
@@ -276,32 +278,41 @@ export default function CashFlows({ cashFlows }) {
   };
 
   return (
-    <section>
+    <section className={styles.articleCard}>
       <h1>现金流量表</h1>
-      <ReactEChartsCore
-        echarts={echarts}
-        option={oaOption}
-        notMerge={true}
-        lazyUpdate={true}
-      />
-      <ReactEChartsCore
-        echarts={echarts}
-        option={iaOption}
-        notMerge={true}
-        lazyUpdate={true}
-      />
-      <ReactEChartsCore
-        echarts={echarts}
-        option={faOption}
-        notMerge={true}
-        lazyUpdate={true}
-      />
-      <ReactEChartsCore
-        echarts={echarts}
-        option={totalOption}
-        notMerge={true}
-        lazyUpdate={true}
-      />
+      <div className={styles.chart}>
+        <ReactEChartsCore
+          echarts={echarts}
+          option={oaOption}
+          notMerge={true}
+          lazyUpdate={true}
+        />
+      </div>
+      <div className={styles.chart}>
+        <ReactEChartsCore
+          echarts={echarts}
+          option={iaOption}
+          notMerge={true}
+          lazyUpdate={true}
+        />
+      </div>
+      <div className={styles.chart}>
+        <ReactEChartsCore
+          echarts={echarts}
+          option={faOption}
+          notMerge={true}
+          lazyUpdate={true}
+        />
+
+      </div>
+      <div className={styles.chart}>
+        <ReactEChartsCore
+          echarts={echarts}
+          option={totalOption}
+          notMerge={true}
+          lazyUpdate={true}
+        />
+      </div>
     </section>
   )
 }

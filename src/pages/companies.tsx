@@ -1,16 +1,20 @@
 import React, { useRef, useState } from 'react';
-import { Button, Card, message, List, Space, Tooltip, Modal, Popconfirm, Timeline, Row, Col, Menu, Dropdown } from 'antd';
-import { EditOutlined, EditTwoTone, FundOutlined, FundTwoTone, HeartOutlined, LikeOutlined, HeartTwoTone } from '@ant-design/icons';
+import { Button, Card, message, List, Space, Tooltip,  Row, Col,} from 'antd';
+import { EditTwoTone, FundTwoTone, HeartTwoTone } from '@ant-design/icons';
 
 
 import { history, Link } from 'umi';
 import { connect } from 'dva';
-import 'braft-editor/dist/output.css'
 
 import styles from './index.less';
 import { PlusOutlined } from '@ant-design/icons';
-import Month from '@/components/month';
-import { dateString } from "@/utils/dates"
+import CompanyQuery from "@/components/company_query"
+
+// Usage of DebounceSelect
+interface UserValue {
+  ID: number;
+  Name: string;
+}
 
 // 项目的目的： 提升个人投资者的价值投资能力
 // 个人投资者真的知道企业的生意
@@ -33,19 +37,12 @@ interface Company {
 
 // 只能查看自己关注的企业图表信息，避免无意义的对比
 
-import { Drawer, Form, Input } from 'antd';
-import { Select, Spin } from 'antd';
-
-const { Option } = Select;
-
-interface Values {
-  name: string;
-}
+import { Drawer } from 'antd';
 
 interface SearchFormProps {
   visible: boolean;
   onClose: () => void;
-  dispatch: (playload:any) => void;
+  dispatch: (playload: any) => void;
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({
@@ -53,12 +50,11 @@ const SearchForm: React.FC<SearchFormProps> = ({
   onClose,
   dispatch,
 }) => {
-  const [form] = Form.useForm();
-  const search = (values:Values) => {
-    console.log("value", values)
+  const [value, setValue] = React.useState<UserValue[]>([]);
+  const star = () => {
     dispatch({
       type: "companies/star",
-      payload: values
+      payload: { id: value }
     })
   }
   return (
@@ -68,24 +64,23 @@ const SearchForm: React.FC<SearchFormProps> = ({
       placement={'bottom'}
       onClose={onClose}
     >
-      <Form
-        form={form}
-        layout="inline"
-        name="search_company"
-        onFinish={search}
-      >
-        <Form.Item
-          name="key"
-          rules={[{ required: true, message: '请输入关注的企业' }]}
-        >
-          {/* 精确查找, 知道企业名称最基本的要求 */}
-          <Input placeholder="公司名称或股票代码" />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">关注</Button>
-        </Form.Item>
-      </Form>
-    </Drawer>
+      <Row>
+        <Col span={4}>
+          <CompanyQuery
+            showSearch
+            value={value}
+            placeholder="选择关联公司"
+            onChange={newValue => {
+              setValue(newValue);
+            }}
+            style={{ width: '100%' }}
+          />
+        </Col>
+        <Col span={4}>
+          <Button type="primary" htmlType="submit" className={styles.leftM1} onClick={star}>关注</Button>
+        </Col>
+      </Row>
+    </Drawer >
   );
 };
 
@@ -140,7 +135,7 @@ function IndexPage({ companies, dispatch }) {
         </List>
       </section>
       <Button className={styles.addBtn} type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => setModalShow(true)} />
-      <SearchForm visible={modalShow} onClose={() => setModalShow(false)} dispatch={dispatch}/>
+      <SearchForm visible={modalShow} onClose={() => setModalShow(false)} dispatch={dispatch} />
     </div >
   );
 }

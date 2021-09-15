@@ -9,6 +9,8 @@ import {
 } from 'echarts/charts';
 // import components, all suffixed with Component
 
+import styles from "@/pages/index.less"
+
 export default function Balance({ balances }) {
   const annual_income = balances.filter(balance => {
     return balance.ReportName.includes('年')
@@ -36,7 +38,7 @@ export default function Balance({ balances }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_income.map(v => v.ReportName.substr(0,4))
+      data: annual_income.map(v => v.ReportName.substr(0, 4))
     },
     yAxis: {
       type: 'value'
@@ -94,7 +96,7 @@ export default function Balance({ balances }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_income.map(v => v.ReportName.substr(0,4))
+      data: annual_income.map(v => v.ReportName.substr(0, 4))
     },
     yAxis: {
       type: 'value'
@@ -182,7 +184,7 @@ export default function Balance({ balances }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_income.map(v => v.ReportName.substr(0,4))
+      data: annual_income.map(v => v.ReportName.substr(0, 4))
     },
     yAxis: {
       type: 'value'
@@ -255,7 +257,7 @@ export default function Balance({ balances }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_income.map(v => v.ReportName.substr(0,4))
+      data: annual_income.map(v => v.ReportName.substr(0, 4))
     },
     yAxis: {
       type: 'value'
@@ -318,7 +320,7 @@ export default function Balance({ balances }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_income.map(v => v.ReportName.substr(0,4))
+      data: annual_income.map(v => v.ReportName.substr(0, 4))
     },
     yAxis: {
       type: 'value'
@@ -353,38 +355,51 @@ export default function Balance({ balances }) {
   };
 
   return (
-    <section>
+    <section className={styles.articleCard}>
       <h1>资产负债表</h1>
-      <ReactEChartsCore
-        echarts={echarts}
-        option={totalOption}
-        notMerge={true}
-        lazyUpdate={true}
-      />
-      <ReactEChartsCore
-        echarts={echarts}
-        option={currentOption}
-        notMerge={true}
-        lazyUpdate={true}
-      />
-      <ReactEChartsCore
-        echarts={echarts}
-        option={nocurrentOption}
-        notMerge={true}
-        lazyUpdate={true}
-      />
-      <ReactEChartsCore
-        echarts={echarts}
-        option={currentLiabilitiesOption}
-        notMerge={true}
-        lazyUpdate={true}
-      />
-      <ReactEChartsCore
-        echarts={echarts}
-        option={nocurrentLiabilitiesOption}
-        notMerge={true}
-        lazyUpdate={true}
-      />
+      <div className={styles.chart}>
+        <ReactEChartsCore
+          echarts={echarts}
+          option={totalOption}
+          notMerge={true}
+          lazyUpdate={true}
+        />
+      </div>
+      <div className={styles.chart}>
+
+        <ReactEChartsCore
+          echarts={echarts}
+          option={currentOption}
+          notMerge={true}
+          lazyUpdate={true}
+        />
+      </div>
+      <div className={styles.chart}>
+        <ReactEChartsCore
+          echarts={echarts}
+          option={nocurrentOption}
+          notMerge={true}
+          lazyUpdate={true}
+        />
+
+      </div>
+      <div className={styles.chart}>
+        <ReactEChartsCore
+          echarts={echarts}
+          option={currentLiabilitiesOption}
+          notMerge={true}
+          lazyUpdate={true}
+        />
+
+      </div>
+      <div className={styles.chart}>
+        <ReactEChartsCore
+          echarts={echarts}
+          option={nocurrentLiabilitiesOption}
+          notMerge={true}
+          lazyUpdate={true}
+        />
+      </div>
     </section>
   )
 }

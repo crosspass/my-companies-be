@@ -38,17 +38,3 @@ export function createComment(payload) {
     body: JSON.stringify(payload),
   });
 }
-
-export function patch(id, values) {
-  return request(`/api/companies/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify(values),
-  });
-}
-
-export function create(values) {
-  return request('/api/companies', {
-    method: 'POST',
-    body: JSON.stringify(values),
-  });
-}

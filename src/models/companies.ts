@@ -1,5 +1,6 @@
 import * as companyService from '../services/company'
 import * as userService from '../services/user'
+import _ from "lodash"
 
 export default {
   namespace: 'companies',
@@ -39,7 +40,11 @@ export default {
       return { ...state, list: payload.companies };
     },
     starCompany(state, { payload }) {
-      return { ...state, list: [...state.list, payload] };
+      if (_.find(state.list, {ID: payload.ID })) {
+        return state
+      } else {
+        return { ...state, list: [...state.list, payload] };
+      }
     },
   },
 }

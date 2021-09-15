@@ -22,52 +22,7 @@ import {
   // SVGRenderer,
 } from 'echarts/renderers';
 
-import { Modal, Button, Form, Input } from 'antd';
-
-const App = ({dispatch, companyId, chart}) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [form] = Form.useForm();
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    console.log('form values', form.getFieldsValue(true))
-    const payload = form.getFieldsValue(true)
-    payload['company_id'] = companyId
-    payload['chart'] = chart
-   
-    dispatch({
-      type: 'company/createComment',
-      payload: payload,
-    });
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
-
-  return (
-    <>
-      <Button type="primary" onClick={showModal}>
-        点评利润
-      </Button>
-      <Modal title="点评利润表" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <Form
-          layout="vertical"
-          form={form}
-        >
-          <Form.Item label="点评利润表" name="content">
-            <Input.TextArea rows={10} placeholder="input placeholder" />
-          </Form.Item>
-        </Form>
-      </Modal>
-    </>
-  );
-};
+import styles from '@/pages/index.less'
 
 // Register the required components
 echarts.use(
@@ -320,7 +275,7 @@ function TotalRevenue({ reportSummary }) {
   };
 
   return (
-    <section>
+    <section className={styles.chart}>
       <h1>营业收入</h1>
       <ReactEChartsCore
         echarts={echarts}
@@ -384,7 +339,7 @@ function Increase({ reportSummary }) {
   };
 
   return (
-    <section>
+    <section className={styles.chart}>
       <h1>营业收入</h1>
       <ReactEChartsCore
         echarts={echarts}
@@ -466,7 +421,7 @@ function ProfitAbility({ reportSummary }) {
   };
 
   return (
-    <section>
+    <section className={styles.chart}>
       <h1>盈利能力</h1>
       <ReactEChartsCore
         echarts={echarts}
@@ -598,7 +553,7 @@ function OperationAbility({ reportSummary }) {
   };
 
   return (
-    <section>
+    <section className={styles.chart}>
       <h1>运营能力</h1>
       <ReactEChartsCore
         echarts={echarts}
@@ -712,7 +667,7 @@ function FinaRisk({ reportSummary }) {
 
 
   return (
-    <section>
+    <section className={styles.chart}>
       <h1>财务风险</h1>
       <ReactEChartsCore
         echarts={echarts}
@@ -730,11 +685,9 @@ function FinaRisk({ reportSummary }) {
   )
 }
 
-export default function Summary({ summary }) {
-  console.log('company', summary)
+export default function Summary({ summary, ...props }) {
   return (
-    <div>
-      {/* <App dispatch={dispatch} companyId={company.ID} chart="Profit"/> */}
+    <div {...props}>
       <TotalRevenue reportSummary={summary}/>
       <Increase reportSummary={summary}/>
       <ProfitAbility reportSummary={summary}/>
@@ -743,3 +696,4 @@ export default function Summary({ summary }) {
     </div>
   );
 }
+

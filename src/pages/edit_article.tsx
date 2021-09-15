@@ -1,11 +1,18 @@
 import React from 'react';
-import { useState, useEffect } from 'react'
 import { connect } from 'dva';
 
+import { Button, Divider } from 'antd'
 import BraftEditor from 'braft-editor'
 import 'braft-editor/dist/index.css'
 
 import styles from "./index.less"
+import CompanyQuery from "@/components/company_query"
+
+// Usage of DebounceSelect
+interface UserValue {
+  label: string;
+  value: string;
+}
 
 
 // 想要在笔记里面展示经营数据， 怎么展示？
@@ -14,6 +21,7 @@ import styles from "./index.less"
 // 每个图形，可以提供一个链接， 链接在网站的日志里面
 // 数据和关注的公司关联， 公司下面可以上传pdf， word， Excel 等文件, 文件大小做限制
 function EditArticle({ dispatch, article }) {
+  const [value, setValue] = React.useState<UserValue[]>([]);
   const updateArticle = (editorState) => {
     article.rawContent = editorState.toRAW()
     article.htmlContent = editorState.toHTML()
@@ -30,13 +38,22 @@ function EditArticle({ dispatch, article }) {
   }
   return (
     <div className={styles.mainContainer}>
-      <p>
-        <BraftEditor
-          value={BraftEditor.createEditorState(article&&article.RawContent)}
-          onChange={updateArticle}
-          onSave={saveArticle}
-        />
-      </p>
+      <BraftEditor
+        value={BraftEditor.createEditorState(article && article.RawContent)}
+        onChange={updateArticle}
+        onSave={saveArticle}
+      />
+      <Divider />
+      <CompanyQuery
+        mode="multiple"
+        value={value}
+        placeholder="选择关联公司"
+        onChange={newValue => {
+          setValue(newValue);
+        }}
+        style={{ width: '100%' }}
+      />
+      <Button type="primary" className={styles.gap}>保存</Button>
     </div>
   )
 }

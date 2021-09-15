@@ -23,7 +23,7 @@ import {
   // SVGRenderer,
 } from 'echarts/renderers';
 
-import { Modal, Button, Form, Input } from 'antd';
+import { Modal, Button, Form, Input, Space } from 'antd';
 
 import styles from './index.less';
 import Income from '../components/income';
@@ -37,7 +37,7 @@ echarts.use(
 );
 
 
-const App = ({dispatch, companyId, chart}) => {
+const App = ({ dispatch, companyId, chart }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
 
@@ -50,7 +50,7 @@ const App = ({dispatch, companyId, chart}) => {
     const payload = form.getFieldsValue(true)
     payload['company_id'] = companyId
     payload['chart'] = chart
-   
+
     dispatch({
       type: 'company/createComment',
       payload: payload,
@@ -88,9 +88,9 @@ function Page({ dispatch, company }) {
   if (!company) {
     return null;
   }
-  const getChartComments = (chartName:string) => {
+  const getChartComments = (chartName: string) => {
     if (company && company.Comments) {
-      return company.Comments.filter(v => v.Chart == chartName )
+      return company.Comments.filter(v => v.Chart == chartName)
     } else {
       return []
     }
@@ -98,7 +98,7 @@ function Page({ dispatch, company }) {
   return (
     <div className={styles.mainContainer}>
       <h1>{current && current.Name}</h1>
-      <Summary summary={company.reportSummaries} />
+      <Summary summary={company.reportSummaries} className={styles.articleCard}/>
       <Income incomes={company.incomes} />
       <CashFlow cashFlows={company.cashFlows} />
       <Balance balances={company.balances} />
