@@ -103,7 +103,7 @@ function IndexPage({ companies, dispatch }) {
               <Space>
                 <EditTwoTone />
                 <Tooltip title="笔记数量">
-                  <Link to={`/companies/${company.ID}/articles`}>{company.ArticleCount}</Link>
+                  <Link to={`/companies/${company.Code}/articles`}>{company.ArticleCount}</Link>
                 </Tooltip>
               </Space>
             </Col>

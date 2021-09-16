@@ -13,6 +13,7 @@ export default {
     incomes: [],
     cashFlows: [],
     balances: [],
+    articles: [],
   },
   effects: {
     *fetch({ payload: code }, { call, put }) {
@@ -62,11 +63,19 @@ export default {
         payload: { balances },
       });
     },
+    *fetchArticles({payload: code}, { call, put }) {
+      const { articles, message } = yield call(companyService.articles, code);
+      console.log('fetch report companies payload', code);
+      yield put({
+        type: 'addArticles',
+        payload: { articles },
+      });
+    },
   },
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
-        const match = pathToRegexp('/companies/:code').exec(pathname);
+        let match = pathToRegexp('/companies/:code').exec(pathname);
         if (match) {
           const code = match[1];
           dispatch({ type: 'fetch', payload: code });
@@ -74,6 +83,11 @@ export default {
           dispatch({ type: 'fetchIncomes', payload: code });
           dispatch({ type: 'fetchCashFlows', payload: code });
           dispatch({ type: 'fetchBalances', payload: code });
+        }
+        match = pathToRegexp('/companies/:code/articles').exec(pathname);
+        if (match) {
+          const code = match[1];
+          dispatch({ type: 'fetchArticles', payload: code });
         }
       });
     },
@@ -96,6 +110,9 @@ export default {
     },
     addBalances(state, { payload }) {
       return { ...state, balances: payload.balances };
+    },
+    addArticles(state, { payload }) {
+      return { ...state, articles: payload.articles };
     },
   },
 }

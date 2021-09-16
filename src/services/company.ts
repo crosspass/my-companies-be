@@ -38,3 +38,7 @@ export function createComment(payload) {
     body: JSON.stringify(payload),
   });
 }
+
+export function articles(code:string) {
+  return request(`/api/companies/${code}/articles`)
+}
