@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Button, Card, message, List, Space, Tooltip,  Row, Col,} from 'antd';
+import { Button, Card, message, List, Space, Tooltip, Row, Col, } from 'antd';
 import { EditTwoTone, FundTwoTone, HeartTwoTone } from '@ant-design/icons';
 
 
@@ -31,7 +31,7 @@ interface Company {
   ID: number,
   Name: string,
   Code: string,
-  NoteCount: number,
+  ArticleCount: number,
   CsvCount: number,
 }
 
@@ -103,7 +103,7 @@ function IndexPage({ companies, dispatch }) {
               <Space>
                 <EditTwoTone />
                 <Tooltip title="笔记数量">
-                  <Link to={`/companies/${company.ID}/articles`}>10</Link>
+                  <Link to={`/companies/${company.ID}/articles`}>{company.ArticleCount}</Link>
                 </Tooltip>
               </Space>
             </Col>
@@ -111,7 +111,7 @@ function IndexPage({ companies, dispatch }) {
               <Space>
                 <FundTwoTone />
                 <Tooltip title="跟踪数据">
-                  <Link to={`/companies/${company.Code}/csvs`}>5</Link>
+                  <Link to={`/companies/${company.Code}/csvs`}>{company.CsvCount}</Link>
                 </Tooltip>
               </Space>
             </Col>

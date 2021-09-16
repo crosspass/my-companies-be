@@ -25,11 +25,12 @@ function NewArticle({ dispatch }) {
   const [editorState, updateEditorState] = useState(BraftEditor.createEditorState(null))
   const [value, setValue] = React.useState<UserValue[]>([]);
   const saveArticle = () => {
+    console.log("click me")
     const htmlContent = editorState.toHTML()
     const rawContent = editorState.toRAW()
     dispatch({
       type: "articles/save",
-      payload: { htmlContent, rawContent }
+      payload: { htmlContent, rawContent, company_id: value }
     })
   }
   return (
@@ -37,7 +38,6 @@ function NewArticle({ dispatch }) {
       <BraftEditor
         value={editorState}
         onChange={updateEditorState}
-        onSave={saveArticle}
       />
       <Divider/>
       <CompanyQuery
@@ -49,7 +49,7 @@ function NewArticle({ dispatch }) {
         }}
         style={{ width: '100%' }}
       />
-      <Button type="primary" className={styles.gap}>保存</Button>
+      <Button type="primary" className={styles.gap} onClick={saveArticle}>保存</Button>
     </div>
   )
 }

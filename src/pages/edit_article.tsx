@@ -33,7 +33,7 @@ function EditArticle({ dispatch, article }) {
   const saveArticle = () => {
     dispatch({
       type: "articles/update",
-      payload: article
+      payload: { ...article, company_ids: value }
     })
   }
   return (
@@ -53,7 +53,7 @@ function EditArticle({ dispatch, article }) {
         }}
         style={{ width: '100%' }}
       />
-      <Button type="primary" className={styles.gap}>保存</Button>
+      <Button type="primary" className={styles.gap} onClick={saveArticle}>保存</Button>
     </div>
   )
 }
