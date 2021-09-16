@@ -6,6 +6,7 @@ import debounce from 'lodash/debounce';
 export interface DebounceSelectProps<ValueType = any>
   extends Omit<SelectProps<ValueType>, 'options' | 'children'> {
   debounceTimeout?: number;
+  initValues: Array<CompanyValue>;
 }
 
 // Usage of DebounceSelect
@@ -34,16 +35,15 @@ async function fetchCompanyList(key: string): Promise<CompanyValue[]> {
 
 function DebounceSelect<
   ValueType extends { key?: string; label: React.ReactNode; value: string | number } = any
->({ debounceTimeout = 800, ...props }: DebounceSelectProps) {
+>({ debounceTimeout = 800, initValues = [], ...props }: DebounceSelectProps) {
   const [fetching, setFetching] = React.useState(false);
-  const [options, setOptions] = React.useState<ValueType[]>([]);
+  const [options, setOptions] = React.useState<ValueType[]>([...initValues]);
   const fetchRef = React.useRef(0);
 
   const debounceFetcher = React.useMemo(() => {
     const loadOptions = (value: string) => {
       fetchRef.current += 1;
       const fetchId = fetchRef.current;
-      setOptions([]);
       setFetching(true);
 
       fetchCompanyList(value).then(newOptions => {
@@ -51,14 +51,13 @@ function DebounceSelect<
           // for fetch callback order
           return;
         }
-
-        setOptions(newOptions);
+        setOptions([...initValues, ...newOptions]);
         setFetching(false);
       });
     };
 
     return debounce(loadOptions, debounceTimeout);
-  }, [fetchCompanyList, debounceTimeout]);
+  }, [fetchCompanyList, debounceTimeout, initValues]);
 
   return (
     <Select<ValueType>

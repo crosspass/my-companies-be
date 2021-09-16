@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, message, List, Popconfirm, Timeline, Row, Col, Menu, Dropdown } from 'antd';
+import { Button, Card, message, List, Popconfirm, Timeline, Row, Col, Menu, Dropdown, Tag } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 import { history, Link } from 'umi';
@@ -26,7 +26,7 @@ interface Article {
   ID: number,
   Content: string,
   CreatedAt: string,
-  summary: string,
+  Companies: Array,
 }
 
 function title(content: string): string {
@@ -36,7 +36,6 @@ function title(content: string): string {
   }
   return ""
 }
-
 
 
 function goNewArticle() {
@@ -82,13 +81,18 @@ function IndexPage({ articles, dispatch }) {
       <Card title={ctitle} className={styles.articleCard} extra={dropdown} >
         <article>
           <div className="braft-output-content" dangerouslySetInnerHTML={{ __html: article.Content.substr(0, 100) + "..." }}></div>
+          <div className={styles.gap}>
+            {article.Companies.map((company) => {
+              return <Tag color="green">{company.Name}</Tag>
+            })}
+          </div>
           <Link to={`/articles/${article.ID}`}>详情</Link>
         </article>
       </Card>
     )
   }
 
-  const changeYear = (year:string) => {
+  const changeYear = (year: string) => {
     dispatch({
       type: 'articles/fetch',
       payload: { page: 0, year: year }

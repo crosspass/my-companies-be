@@ -21,7 +21,11 @@ interface UserValue {
 // 每个图形，可以提供一个链接， 链接在网站的日志里面
 // 数据和关注的公司关联， 公司下面可以上传pdf， word， Excel 等文件, 文件大小做限制
 function EditArticle({ dispatch, article }) {
-  const [value, setValue] = React.useState<UserValue[]>([]);
+  if (!article) {
+    return null 
+  }
+  console.log("article.Companies", article.Companies)
+  const [value, setValue] = React.useState<UserValue[]>((article.Companies || []).map(company => company.ID));
   const updateArticle = (editorState) => {
     article.rawContent = editorState.toRAW()
     article.htmlContent = editorState.toHTML()
@@ -47,6 +51,7 @@ function EditArticle({ dispatch, article }) {
       <CompanyQuery
         mode="multiple"
         value={value}
+        initValues={(article.Companies || []).map(company => ({label: company.Name, value: company.ID}))}
         placeholder="选择关联公司"
         onChange={newValue => {
           setValue(newValue);
