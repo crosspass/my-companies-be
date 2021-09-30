@@ -265,7 +265,7 @@ export default function CashFlows({ cashFlows }) {
         data: annual_income.map(v => v.NetIncreaseInCce)
       },
       {
-        name: '期初初现金',
+        name: '期初现金',
         type: 'line',
         data: annual_income.map(v => v.InitialBalanceOfCce)
       },

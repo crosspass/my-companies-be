@@ -93,10 +93,6 @@ const Login: React.FC<{ dispatch, user }> = ({ dispatch, user }) => {
                   required: true,
                   message: '请输入邮箱!',
                 },
-                {
-                  pattern: /^\w+@[a-z]+(\.[a-z]+)+$/,
-                  message: '不合法的邮箱格式!',
-                },
               ]}
             />
             <ProFormText.Password
@@ -148,10 +144,6 @@ const Login: React.FC<{ dispatch, user }> = ({ dispatch, user }) => {
                 {
                   required: true,
                   message: '请输入邮箱!',
-                },
-                {
-                  pattern: /^\w+@[a-z]+(\.[a-z]+)+$/,
-                  message: '不合法的邮箱格式!',
                 },
               ]}
             />
