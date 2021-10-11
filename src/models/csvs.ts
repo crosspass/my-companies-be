@@ -9,13 +9,21 @@ const token = localStorage.getItem('token')
 export default {
   namespace: 'csvs',
   state: {
-    token: token,
+    code: '',
     list: [],
   },
   effects: {
     *fetch({payload}, { call, put }) {
       console.log('values', payload)
       const { csvs, message } = yield call(csvService.fetch, { code: payload });
+      yield put({
+        type: 'setCsvs',
+        payload: csvs || []
+      });
+    },
+    *create({payload}, { call, put }) {
+      console.log('values', payload)
+      const { csvs, message } = yield call(csvService.save, payload);
       yield put({
         type: 'setCsvs',
         payload: csvs || []

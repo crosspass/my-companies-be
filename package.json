@@ -30,6 +30,7 @@
     "echarts-for-react": "^3.0.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "react-datasheet": "^1.4.9",
     "umi": "^3.4.7",
     "wangeditor": "^4.7.6"
   },

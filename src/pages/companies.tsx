@@ -77,7 +77,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
           />
         </Col>
         <Col span={4}>
-          <Button type="primary" htmlType="submit" className={styles.leftM1} onClick={star}>关注</Button>
+          <Button type="primary" htmlType="submit" className={styles.lM1} onClick={star}>关注</Button>
         </Col>
       </Row>
     </Drawer >
