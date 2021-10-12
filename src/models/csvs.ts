@@ -1,5 +1,6 @@
 import * as csvService from '../services/csvs'
 import pathToRegexp from 'path-to-regexp'
+import _ from "lodash"
 
 // type interface Company {
 // }
@@ -23,10 +24,18 @@ export default {
     },
     *create({payload}, { call, put }) {
       console.log('values', payload)
-      const { csvs, message } = yield call(csvService.save, payload);
+      const { csv, message } = yield call(csvService.save, payload);
       yield put({
-        type: 'setCsvs',
-        payload: csvs || []
+        type: 'addCsvToList',
+        payload: csv
+      });
+    },
+    *update({payload}, { call, put }) {
+      console.log('values', payload)
+      const { csv, message } = yield call(csvService.update, payload);
+      yield put({
+        type: 'updateCsvInList',
+        payload: csv
       });
     },
   },
@@ -48,6 +57,13 @@ export default {
     },
     setCsvs(state, { payload }) {
       return { ...state, list: payload};
+    },
+    addCsvToList(state, { payload }) {
+      return { ...state, list: [...state.list, payload]};
+    },
+    updateCsvInList(state, { payload }) {
+      const i = _.findIndex(state.list, (v) => v.ID = payload.ID)
+      return { ...state, list: [...state.list.slice(0,i), payload, ...state.list.slice(i+1)]};
     },
   },
 }

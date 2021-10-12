@@ -24,7 +24,6 @@ export default function CsvChart({ type, title, data }:{type:string, title: stri
   for(let i = 1; i <= header.length; i++) {
     indexs.push(i)
   }
-  console.log("indexs.........", indexs)
   const totalOption = {
     title: {
       text: title 

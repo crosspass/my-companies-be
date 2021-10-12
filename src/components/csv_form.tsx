@@ -31,7 +31,11 @@ const CsvForm: React.FC = ({
   initValue,
   onChange,
 }) => {
-  const grid = initValue.data
+  let grid = initValue.data
+  if (typeof(initValue.data) === 'string') {
+    grid = JSON.parse(initValue.data)
+  } 
+  console.log("......grid", grid)
   const chartType = initValue.chartType
   const title = initValue.title
   const valueRenderer = cell => cell.value;
@@ -41,6 +45,7 @@ const CsvForm: React.FC = ({
       cgrid[row][col] = { ...grid[row][col], value }
     })
     onChange({
+      id: initValue.id,
       chartType: chartType,
       title: title,
       data: cgrid
@@ -49,6 +54,7 @@ const CsvForm: React.FC = ({
   const onContextMenu = (e, cell, i, j) => cell.readOnly ? e.preventDefault() : null;
   const setChartType = e => {
     onChange({
+      id: initValue.id,
       title: title,
       chartType: e.target.value,
       data: grid
@@ -56,6 +62,7 @@ const CsvForm: React.FC = ({
   }
   const setTitle = (e) => {
     onChange({
+      id: initValue.id,
       chartType: chartType,
       title: e.target.value,
       data: grid
@@ -80,6 +87,7 @@ const CsvForm: React.FC = ({
       newData.push(row)
     }
     onChange({
+      id: initValue.id,
       chartType: chartType,
       title: title,
       data: newData

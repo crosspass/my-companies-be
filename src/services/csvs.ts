@@ -8,8 +8,8 @@ export function fetchOne(articleID: number) {
   return request(`/api/articles/${articleID}`);
 }
 interface CsvParams{
+  id?: number,
   code: string,
-  csvID?: number,
   title: string,
   chartType: string,
   data: Array<any>
@@ -20,3 +20,11 @@ export function save(payload: CsvParams) {
     body: JSON.stringify(payload),
   });
 }
+
+export function update(payload: CsvParams) {
+  return request(`/api/csvs/${payload.id}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+}
+

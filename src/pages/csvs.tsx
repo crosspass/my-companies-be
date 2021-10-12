@@ -1,9 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useReducer } from 'react'
 import { Popover, Button, Col, Modal, Card, Dropdown, Menu, Input, InputNumber, message, List, Radio, Row, Space, Tooltip, Upload } from "antd"
 import { AppstoreOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
 import { Link, connect } from "umi"
-import ReactDataSheet from 'react-datasheet'
-import "react-datasheet/lib/react-datasheet.css";
 import "@/pages/custom.css";
 
 import CSVChart2 from "@/components/dcvs"
@@ -13,15 +11,13 @@ import { dateString } from "@/utils/dates"
 import styles from "@/pages/index.less"
 
 function page({ csvs, dispatch }) {
-  const [modalShow, setModalShow] = useState(false)
-  const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
 
   const showModal = () => {
-    setVisible(true);
+    setState({ visible: true });
   };
 
-  const cData =  {
+  const cData = {
     title: '图表主题',
     chartType: 'line',
     data: [
@@ -35,33 +31,57 @@ function page({ csvs, dispatch }) {
     ]
   }
 
-  const [chartData, setChartData] = useState(cData)
+  const [state, setState] = useReducer(
+    (state, newState) => ({ ...state, ...newState }),
+    { visible: false, data: cData }
+  )
 
-  const onChange = ( data: {title?:string, chartType?:string, grid?:Array<any>}) => {
-    setChartData(data)
+  const onChange = (data: { title?: string, chartType?: string, grid?: Array<any> }) => {
+    setState({ data: data })
   }
 
   const handleOk = async () => {
     setConfirmLoading(true);
-    const data = JSON.stringify(chartData.data)
-    await dispatch({
-      type: 'csvs/create',
-      payload: { code: csvs.code, ...chartData, data},
-    })
-    setVisible(false);
+    const data = JSON.stringify(state.data.data)
+    console.log("data..............", state.data)
+    if (state.data.id) {
+      await dispatch({
+        type: 'csvs/update',
+        payload: { code: csvs.code, ...state.data, data },
+      })
+    } else {
+      await dispatch({
+        type: 'csvs/create',
+        payload: { code: csvs.code, ...state.data, data },
+      })
+    }
+    setState({ visible: false });
     setConfirmLoading(false);
   };
 
   const handleCancel = () => {
-    setVisible(false);
+    setState({ visible: false });
   };
+
+  const setUpdateCsv = (csv) => {
+    const data = {
+      id: csv.ID,
+      title: csv.title,
+      chartType: csv.chartType,
+      data: csv.data
+    }
+    setState({
+      visible: true,
+      data: data
+    });
+  }
   const csvCard = function (csv) {
     return (
-      <Card className={styles.articleCard} title={csv.OriginName}>
+      <Card className={styles.articleCard}>
         <CSVChart2 type={csv.chartType} data={csv.data} title={csv.title} />
         <Space size="large">
           <span>{dateString(csv.UpdatedAt)}</span>
-          <Button onClick={showModal}>更新图表数据</Button>
+          <Button onClick={() => setUpdateCsv(csv)}>更新图表数据</Button>
         </Space>
       </Card>
     )
@@ -80,13 +100,13 @@ function page({ csvs, dispatch }) {
       <Button className={styles.addBtn} type="primary" shape="circle" icon={<PlusOutlined />} onClick={showModal} />
       <Modal
         title="更新图表数据"
-        visible={visible}
+        visible={state.visible}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
         width={1000}
       >
-        <CsvForm initValue={chartData} onChange={onChange} />
+        <CsvForm initValue={state.data} onChange={onChange} />
       </Modal>
     </div>
   )
