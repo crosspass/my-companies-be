@@ -62,7 +62,7 @@ export default {
       return { ...state, list: [...state.list, payload]};
     },
     updateCsvInList(state, { payload }) {
-      const i = _.findIndex(state.list, (v) => v.ID = payload.ID)
+      const i = _.findIndex(state.list, (v) => v.ID == payload.ID)
       return { ...state, list: [...state.list.slice(0,i), payload, ...state.list.slice(i+1)]};
     },
   },

@@ -13,10 +13,6 @@ import styles from "@/pages/index.less"
 function page({ csvs, dispatch }) {
   const [confirmLoading, setConfirmLoading] = React.useState(false);
 
-  const showModal = () => {
-    setState({ visible: true });
-  };
-
   const cData = {
     title: '图表主题',
     chartType: 'line',
@@ -30,6 +26,10 @@ function page({ csvs, dispatch }) {
       [{ value: "2021.10" }, { value: 1 }, { value: 4 }],
     ]
   }
+
+  const showModal = () => {
+    setState({ visible: true, data: cData });
+  };
 
   const [state, setState] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
