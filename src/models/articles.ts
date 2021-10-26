@@ -1,6 +1,7 @@
-import * as articleService from '../services/articles'
-import pathToRegexp from 'path-to-regexp'
-import _ from 'lodash'
+import * as articleService from '../services/articles';
+import pathToRegexp from 'path-to-regexp';
+import { message } from 'antd';
+import _ from 'lodash';
 
 export default {
   namespace: 'articles',
@@ -8,12 +9,11 @@ export default {
     list: [],
     current: null,
     stats: [],
-    year: new Date().getFullYear()
+    year: new Date().getFullYear(),
   },
   effects: {
     *fetch({ payload }, { call, put }) {
       const { articles, message } = yield call(articleService.fetch, payload);
-      console.log('response articles', articles)
       yield put({
         type: 'setYear',
         payload: payload.year,
@@ -23,35 +23,38 @@ export default {
         payload: articles,
       });
     },
-    *stats({ year }: {year: string}, { call, put }) {
+    *stats({ year }: { year: string }, { call, put }) {
       const { stats, message } = yield call(articleService.stats, year);
-      console.log('response stats', stats)
       yield put({
         type: 'setStats',
         payload: stats || [],
       });
     },
     *fetchOne({ articleID }, { call, put }) {
-      const { article, message } = yield call(articleService.fetchOne, articleID);
-      console.log('response articles', article)
+      const { article } = yield call(articleService.fetchOne, articleID);
       yield put({
         type: 'fetchArticle',
         payload: article,
       });
     },
     *save({ payload }, { call }) {
-      const { article, message } = yield call(articleService.save, payload);
+      yield call(articleService.save, payload);
+      message.info('更新成功!');
     },
     *update({ payload }, { call }) {
-      const { article, message } = yield call(articleService.update, payload);
+      yield call(articleService.update, payload);
+      message.info('更新成功!');
     },
     *delete({ payload }, { call, put }) {
-      const { article, message } = yield call(articleService.markDeleted, payload);
+      const { article, message } = yield call(
+        articleService.markDeleted,
+        payload,
+      );
       if (message == 'ok') {
         yield put({
-          type: "deleteArticle",
-          payload: payload
-        })
+          type: 'deleteArticle',
+          payload: payload,
+        });
       }
     },
   },
@@ -59,12 +62,14 @@ export default {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
         if (pathname === '/') {
-          const year = new Date().getFullYear()
-          const payload = { page: 0, year: `${year}` }
+          const year = new Date().getFullYear();
+          const payload = { page: 0, year: `${year}` };
           dispatch({ type: 'fetch', payload });
           dispatch({ type: 'stats', year });
         }
-        const match = pathToRegexp('/articles/:id').exec(pathname) || pathToRegexp('/articles/:id/edit').exec(pathname);
+        const match =
+          pathToRegexp('/articles/:id').exec(pathname) ||
+          pathToRegexp('/articles/:id/edit').exec(pathname);
         if (match) {
           const articleID = match[1];
           dispatch({ type: 'fetchOne', articleID });
@@ -83,14 +88,14 @@ export default {
       return { ...state, current: payload };
     },
     deleteArticle(state, { payload }) {
-      const filteredList = _.filter(state.list, v => (v.ID != payload))
-      return { ...state, list: filteredList }
+      const filteredList = _.filter(state.list, (v) => v.ID != payload);
+      return { ...state, list: filteredList };
     },
     setStats(state, { payload }) {
-      return { ...state, stats: payload }
+      return { ...state, stats: payload };
     },
     setYear(state, { payload }) {
-      return { ...state, year: payload }
+      return { ...state, year: payload };
     },
   },
-}
+};
