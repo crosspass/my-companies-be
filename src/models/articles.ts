@@ -1,7 +1,9 @@
-import * as articleService from '../services/articles';
 import pathToRegexp from 'path-to-regexp';
 import { message } from 'antd';
 import _ from 'lodash';
+import { history } from 'umi';
+
+import * as articleService from '../services/articles';
 
 export default {
   namespace: 'articles',
@@ -38,12 +40,13 @@ export default {
       });
     },
     *save({ payload }, { call }) {
-      yield call(articleService.save, payload);
-      message.info('更新成功!');
+      const { article } = yield call(articleService.save, payload);
+      message.info('保存成功!');
+      history.push(`/articles/${article.ID}/edit`);
     },
     *update({ payload }, { call }) {
       yield call(articleService.update, payload);
-      message.info('更新成功!');
+      message.info('保存成功!');
     },
     *delete({ payload }, { call, put }) {
       const { article, message } = yield call(
