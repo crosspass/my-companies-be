@@ -97,7 +97,7 @@ function IndexPage({ companies, dispatch }) {
     const ctitle = `${company.Name} (${company.Code})`
     return (
       <List.Item>
-        <Card title={<Link to={`/companies/${company.Code}`}>{ctitle} </Link>} extra={<HeartTwoTone twoToneColor="#eb2f96" />}>
+        <Card title={<Link to={`/companies/${company.Code}/finances`}>{ctitle} </Link>} extra={<HeartTwoTone twoToneColor="#eb2f96" />}>
           <Row gutter={16}>
             <Col span={12}>
               <Space>

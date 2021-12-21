@@ -1,4 +1,5 @@
 import * as userService from '../services/user'
+import { history } from 'umi';
 import pathToRegexp from 'path-to-regexp'
 
 // type interface Company {
@@ -19,6 +20,7 @@ export default {
         type: 'setToken',
         payload: { token },
       });
+      window.location.href = '/';
     },
     *register({payload: values}, { call, put }) {
       console.log('values', values)

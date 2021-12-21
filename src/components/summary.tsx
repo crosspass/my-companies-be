@@ -34,7 +34,6 @@ echarts.use([
 // The usage of ReactEChartsCore are same with above.
 
 function TotalRevenue({ reportSummary }) {
-  console.log('comments', reportSummary);
   const annual_summary = reportSummary.filter((summary) => {
     return summary.ReportName.includes('年');
   });
@@ -104,7 +103,6 @@ function TotalRevenue({ reportSummary }) {
 }
 
 function Increase({ reportSummary }) {
-  console.log('comments', reportSummary);
   const annual_summary = reportSummary.filter((summary) => {
     return summary.ReportName.includes('年');
   });
@@ -180,7 +178,6 @@ function Increase({ reportSummary }) {
 }
 
 function ProfitAbility({ reportSummary }) {
-  console.log('comments', reportSummary);
   if (!reportSummary) {
     return null;
   }
@@ -276,7 +273,6 @@ function ProfitAbility({ reportSummary }) {
 }
 
 function OperationAbility({ reportSummary }) {
-  console.log('comments', reportSummary);
   const annual_summary = reportSummary.filter((summary) => {
     return summary.ReportName.includes('年');
   });

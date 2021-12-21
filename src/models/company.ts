@@ -75,7 +75,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
-        let match = pathToRegexp('/companies/:code').exec(pathname);
+        let match = pathToRegexp('/companies/:code/finances').exec(pathname);
         if (match) {
           const code = match[1];
           dispatch({ type: 'fetch', payload: code });
