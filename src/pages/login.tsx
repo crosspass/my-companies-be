@@ -23,10 +23,9 @@ const gotoHome = () => {
   }, 10);
 };
 
-
-const Login: React.FC<{ dispatch, user }> = ({ dispatch, user }) => {
+const Login: React.FC<{ dispatch; user }> = ({ dispatch, user }) => {
   if (user.info) {
-    gotoHome()
+    gotoHome();
   }
   return (
     <div>
@@ -49,8 +48,8 @@ const Login: React.FC<{ dispatch, user }> = ({ dispatch, user }) => {
             alt="logo"
             src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
           />
-          个人投资笔记
-      </h1>
+          企业研究个人笔记
+        </h1>
         <div
           style={{
             marginTop: 12,
@@ -58,8 +57,8 @@ const Login: React.FC<{ dispatch, user }> = ({ dispatch, user }) => {
             marginBottom: 40,
           }}
         >
-          专注公司基本面的笔记
-      </div>
+          企业经营研究笔记
+        </div>
         <Tabs defaultActiveKey="1">
           <TabPane tab="登录" key="1">
             <ProForm
@@ -100,7 +99,7 @@ const Login: React.FC<{ dispatch, user }> = ({ dispatch, user }) => {
               <ProFormText.Password
                 fieldProps={{
                   size: 'large',
-                  prefix: <LockOutlined />
+                  prefix: <LockOutlined />,
                 }}
                 name="password"
                 rules={[
@@ -183,7 +182,12 @@ const Login: React.FC<{ dispatch, user }> = ({ dispatch, user }) => {
       </div>
       <DefaultFooter
         links={[
-          { key: 'beian', title: '粤ICP备2021170738号-1', href: 'https://beian.miit.gov.cn/' },
+          {
+            key: 'beian',
+            title: '粤ICP备2021170738号-1',
+            href: 'https://beian.miit.gov.cn/',
+            blankTarget: true,
+          },
         ]}
         copyright="2021"
       />
@@ -192,11 +196,11 @@ const Login: React.FC<{ dispatch, user }> = ({ dispatch, user }) => {
 };
 
 function mapStateToProps(state, ownProps) {
-  console.log('login page')
-  console.log(state.user)
-  console.log('login page')
+  console.log('login page');
+  console.log(state.user);
+  console.log('login page');
   return {
-    user: state.user
+    user: state.user,
   };
 }
 
