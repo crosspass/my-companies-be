@@ -10,8 +10,8 @@ export default defineConfig({
   routes: [
     { path: '/', component: '@/pages/index' },
     { path: '/login', component: '@/pages/login' },
-    { path: '/articles', component: '@/pages/index', name: '我的投资笔记' },
     { path: '/companies', component: '@/pages/companies', name: '关注的公司' },
+    { path: '/articles', component: '@/pages/index', name: '我的投资笔记' },
     {
       path: '/companies/:code/csvs',
       component: '@/pages/company/csvs',
