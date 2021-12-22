@@ -1,28 +1,7 @@
-import React, { useState, useReducer } from 'react';
-import {
-  Popover,
-  Button,
-  Col,
-  Modal,
-  Card,
-  Dropdown,
-  Menu,
-  Input,
-  InputNumber,
-  message,
-  List,
-  Radio,
-  Row,
-  Space,
-  Tooltip,
-  Upload,
-} from 'antd';
-import {
-  AppstoreOutlined,
-  PlusOutlined,
-  UploadOutlined,
-} from '@ant-design/icons';
-import { Link, connect } from 'umi';
+import React, { useReducer } from 'react';
+import { Button, Modal, Card, List, Space } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { connect } from 'umi';
 import '@/pages/custom.css';
 
 import CSVChart2 from '@/components/dcvs';
@@ -32,6 +11,7 @@ import { dateString } from '@/utils/dates';
 import styles from '@/pages/index.less';
 
 function page({ csvs, dispatch }) {
+  console.log('page csvs');
   const [confirmLoading, setConfirmLoading] = React.useState(false);
 
   const cData = {
