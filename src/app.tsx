@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from 'dva';
 import {
   BasicLayoutProps,
   Settings as LayoutSettings,
@@ -76,6 +77,26 @@ export async function getInitialState(): Promise<{
   };
 }
 
+const HeaderContent: React.FC = ({ company }) => {
+  console.log('header company', company);
+  let match = pathToRegexp('/companies/:code/:sub').exec(
+    history.location.pathname,
+  );
+  if (match && company && company.current) {
+    const { current } = company;
+    return <p>{current.Name}</p>;
+  }
+  return null;
+};
+
+function mapStateToProps(state, ownProps) {
+  return {
+    company: state.company,
+  };
+}
+
+const HeaderContentWrap = connect(mapStateToProps)(HeaderContent);
+
 export const layout = ({
   initialState,
 }: {
@@ -85,6 +106,7 @@ export const layout = ({
   const { currentUser } = initialState;
   const pure = location.pathname == '/login';
   return {
+    headerContentRender: () => <HeaderContentWrap />,
     rightContentRender: () => <RightContent />,
     onPageChange: () => {
       const { currentUser } = initialState;

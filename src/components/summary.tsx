@@ -33,16 +33,29 @@ echarts.use([
 
 // The usage of ReactEChartsCore are same with above.
 
-function TotalRevenue({ reportSummary }) {
-  const annual_summary = reportSummary.filter((summary) => {
-    return summary.ReportName.includes('年');
+function getChartOptions(
+  data: any,
+  filter: string,
+  title: string,
+  legends: Array<string>,
+  keys: Array<string>,
+) {
+  const filteredData = data.filter((summary) => {
+    return summary.Category.includes(filter);
   });
-  if (reportSummary.length == 0) {
-    return null;
-  }
-  const option = {
+  let i = -1;
+  const series = legends.map((legend) => {
+    i += 1;
+    return {
+      name: legend,
+      type: 'line',
+      data: filteredData.map((v) => v[keys[i]]),
+    };
+  });
+
+  const options = {
     title: {
-      text: '营收',
+      text: title,
       textStyle: {
         fontWeight: 'normal',
         fontSize: 16,
@@ -53,7 +66,7 @@ function TotalRevenue({ reportSummary }) {
     },
     legend: {
       top: 40,
-      data: ['营业收入', '净利润', '扣非净利润'],
+      data: legends,
     },
     grid: {
       top: 80,
@@ -65,36 +78,30 @@ function TotalRevenue({ reportSummary }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_summary.map((v) => v.ReportName.substr(0, 4)),
+      data: filteredData.map((v) => v.ReportName.substr(0, 4)),
     },
     yAxis: {
       type: 'value',
     },
-    series: [
-      {
-        name: '营业收入',
-        type: 'line',
-        data: annual_summary.map((v) => v.TotalRevenue),
-      },
-      {
-        name: '净利润',
-        type: 'line',
-        data: annual_summary.map((v) => v.NetProfitAtsopc),
-      },
-      {
-        name: '扣非净利润',
-        type: 'line',
-        data: annual_summary.map((v) => v.NetProfitAfterNrgalAtsolc),
-      },
-    ],
+    series: series,
   };
+  return options;
+}
 
+function TotalRevenue({ reportSummary, filter }) {
+  const options = getChartOptions(
+    reportSummary,
+    filter,
+    '营收',
+    ['营业收入', '净利润', '扣非净利润'],
+    ['TotalRevenue', 'NetProfitAtsopc', 'NetProfitAfterNrgalAtsolc'],
+  );
   return (
     <section className={styles.chart}>
       <ReactEChartsCore
         className={styles.echarts}
         echarts={echarts}
-        option={option}
+        option={options}
         notMerge={true}
         lazyUpdate={true}
       />
@@ -102,9 +109,15 @@ function TotalRevenue({ reportSummary }) {
   );
 }
 
-function Increase({ reportSummary }) {
+function Increase({
+  reportSummary,
+  filter,
+}: {
+  reportSummary: Array<any>;
+  filter: string;
+}) {
   const annual_summary = reportSummary.filter((summary) => {
-    return summary.ReportName.includes('年');
+    return summary.Category.includes(filter);
   });
   if (reportSummary.length == 0) {
     return null;
@@ -177,86 +190,34 @@ function Increase({ reportSummary }) {
   );
 }
 
-function ProfitAbility({ reportSummary }) {
+function ProfitAbility({ reportSummary, filter }) {
   if (!reportSummary) {
     return null;
   }
   if (reportSummary.length == 0) {
     return null;
   }
-  const annual_summary = reportSummary.filter((summary) => {
-    return summary.ReportName.includes('年');
-  });
-  const option = {
-    title: {
-      text: '盈利能力',
-      textStyle: {
-        fontWeight: 'normal',
-        fontSize: 16,
-      },
-    },
-    tooltip: {
-      trigger: 'axis',
-    },
-    legend: {
-      top: 40,
-      data: [
-        '净资产收益率',
-        '净资产收益率-摊薄',
-        '总资产报酬率',
-        '人力投入回报率',
-        '销售毛利率',
-        '销售净利率',
-      ],
-    },
-    grid: {
-      top: 80,
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true,
-    },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: annual_summary.map((v) => v.ReportName.substr(0, 4)),
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: [
-      {
-        name: '净资产收益率',
-        type: 'line',
-        data: annual_summary.map((v) => v.AvgRoe),
-      },
-      {
-        name: '净资产收益率-摊薄',
-        type: 'line',
-        data: annual_summary.map((v) => v.OreDlt),
-      },
-      {
-        name: '总资产报酬率',
-        type: 'line',
-        data: annual_summary.map((v) => v.NetInterestOfTotalAssets),
-      },
-      {
-        name: '人力投入回报率',
-        type: 'line',
-        data: annual_summary.map((v) => v.Rop),
-      },
-      {
-        name: '销售毛利率',
-        type: 'line',
-        data: annual_summary.map((v) => v.GrossSellingRate),
-      },
-      {
-        name: '销售净利率',
-        type: 'line',
-        data: annual_summary.map((v) => v.NetSellingRate),
-      },
+  const options = getChartOptions(
+    reportSummary,
+    filter,
+    '盈利能力',
+    [
+      '净资产收益率',
+      '净资产收益率-摊薄',
+      '总资产报酬率',
+      '人力投入回报率',
+      '销售毛利率',
+      '销售净利率',
     ],
-  };
+    [
+      'AvgRoe',
+      'OreDlt',
+      'NetInterestOfTotalAssets',
+      'Rop',
+      'GrossSellingRate',
+      'NetSellingRate)',
+    ],
+  );
 
   return (
     <section className={styles.chart}>
@@ -264,7 +225,7 @@ function ProfitAbility({ reportSummary }) {
       <ReactEChartsCore
         className={styles.echarts}
         echarts={echarts}
-        option={option}
+        option={options}
         notMerge={true}
         lazyUpdate={true}
       />
@@ -272,9 +233,9 @@ function ProfitAbility({ reportSummary }) {
   );
 }
 
-function OperationAbility({ reportSummary }) {
+function OperationAbility({ reportSummary, filter }) {
   const annual_summary = reportSummary.filter((summary) => {
-    return summary.ReportName.includes('年');
+    return summary.Category.includes(filter);
   });
   if (reportSummary.length == 0) {
     return null;
@@ -436,9 +397,9 @@ function OperationAbility({ reportSummary }) {
   );
 }
 
-function FinaRisk({ reportSummary }) {
+function FinaRisk({ reportSummary, filter }) {
   const annual_summary = reportSummary.filter((summary) => {
-    return summary.ReportName.includes('年');
+    return summary.Category.includes(filter);
   });
   if (reportSummary.length == 0) {
     return null;
@@ -563,14 +524,14 @@ function FinaRisk({ reportSummary }) {
   );
 }
 
-export default function Summary({ summary, ...props }) {
+export default function Summary({ summary, filter }) {
   return (
-    <div {...props}>
-      <TotalRevenue reportSummary={summary} />
-      <Increase reportSummary={summary} />
-      <ProfitAbility reportSummary={summary} />
-      <OperationAbility reportSummary={summary} />
-      <FinaRisk reportSummary={summary} />
-    </div>
+    <section className={styles.articleCard}>
+      <TotalRevenue reportSummary={summary} filter={filter} />
+      <Increase reportSummary={summary} filter={filter} />
+      <ProfitAbility reportSummary={summary} filter={filter} />
+      <OperationAbility reportSummary={summary} filter={filter} />
+      <FinaRisk reportSummary={summary} filter={filter} />
+    </section>
   );
 }

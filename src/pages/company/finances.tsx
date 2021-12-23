@@ -97,22 +97,25 @@ function Page({ company }) {
       return [];
     }
   };
+
+  const [filter, setFilter] = useState('Q4');
+
   return (
     <div className={styles.mainContainer}>
-      <h1>{current && current.Name}</h1>
-      <Summary
-        summary={company.reportSummaries}
-        className={styles.articleCard}
-      />
-      <Income incomes={company.incomes} />
-      <CashFlow cashFlows={company.cashFlows} />
-      <Balance balances={company.balances} />
+      <Button onClick={() => setFilter('Q4')}>年度</Button>
+      <Button onClick={() => setFilter('Q')}>季度</Button>
+      <Button onClick={() => setFilter('Q1')}>一季度</Button>
+      <Button onClick={() => setFilter('Q ')}>二季度</Button>
+      <Button onClick={() => setFilter('Q3')}>三季度</Button>
+      <Summary summary={company.reportSummaries} filter={filter} />
+      <Income incomes={company.incomes} filter={filter} />
+      <CashFlow cashFlows={company.cashFlows} filter={filter} />
+      <Balance balances={company.balances} filter={filter} />
     </div>
   );
 }
 
 function mapStateToProps(state, ownProps) {
-  console.log('state.company', state.company);
   return {
     loading: state.loading.global,
     company: state.company,

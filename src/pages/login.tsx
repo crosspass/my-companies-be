@@ -151,7 +151,7 @@ const Login: React.FC<{ dispatch; user }> = ({ dispatch, user }) => {
               <ProFormText.Password
                 fieldProps={{
                   size: 'large',
-                  prefix: <MailOutlined />,
+                  prefix: <LockOutlined />,
                 }}
                 name="password"
                 rules={[
@@ -165,7 +165,7 @@ const Login: React.FC<{ dispatch; user }> = ({ dispatch, user }) => {
               <ProFormText.Password
                 fieldProps={{
                   size: 'large',
-                  prefix: <MailOutlined />,
+                  prefix: <LockOutlined />,
                 }}
                 name="confirmedPassword"
                 rules={[
