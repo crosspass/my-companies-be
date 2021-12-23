@@ -3,11 +3,11 @@ import {
   BasicLayoutProps,
   Settings as LayoutSettings,
 } from '@ant-design/pro-layout';
-import { Avatar, Button, Dropdown, Menu } from 'antd';
-
 import { RequestOptionsInit } from 'umi-request';
 import { history, RequestConfig } from 'umi';
 import pathToRegexp from 'path-to-regexp';
+
+import RightContent from '@/components/headers/right_content';
 import * as userService from './services/user';
 
 import { getToken } from '@/utils/localdb';
@@ -83,31 +83,9 @@ export const layout = ({
 }): BasicLayoutProps => {
   console.log('initialState', initialState);
   const { currentUser } = initialState;
-  function logout() {}
-  const menu = (
-    <Menu>
-      <Menu.Item>
-        <Button type="text" onClick={logout}>
-          登出
-        </Button>
-      </Menu.Item>
-    </Menu>
-  );
-
-  const UserMenu = (
-    <Dropdown overlay={menu}>
-      <Avatar
-        style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}
-        size={40}
-      >
-        {currentUser?.Email}
-      </Avatar>
-    </Dropdown>
-  );
-
   const pure = location.pathname == '/login';
   return {
-    rightContentRender: () => UserMenu,
+    rightContentRender: () => <RightContent />,
     onPageChange: () => {
       const { currentUser } = initialState;
       const { location } = history;

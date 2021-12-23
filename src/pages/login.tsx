@@ -112,7 +112,7 @@ const Login: React.FC<{ dispatch; user }> = ({ dispatch, user }) => {
               />
             </ProForm>
           </TabPane>
-          <TabPane tab="注册" key="2">
+          {/* <TabPane tab="注册" key="2">
             <ProForm
               onFinish={async (values) => {
                 await dispatch({
@@ -177,7 +177,7 @@ const Login: React.FC<{ dispatch; user }> = ({ dispatch, user }) => {
                 placeholder="请再次输入密码"
               />
             </ProForm>
-          </TabPane>
+          </TabPrne> */}
         </Tabs>
       </div>
       <DefaultFooter
