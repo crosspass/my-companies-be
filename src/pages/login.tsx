@@ -112,7 +112,7 @@ const Login: React.FC<{ dispatch; user }> = ({ dispatch, user }) => {
               />
             </ProForm>
           </TabPane>
-          {/* <TabPane tab="注册" key="2">
+          <TabPane tab="注册" key="2">
             <ProForm
               onFinish={async (values) => {
                 await dispatch({
@@ -177,7 +177,7 @@ const Login: React.FC<{ dispatch; user }> = ({ dispatch, user }) => {
                 placeholder="请再次输入密码"
               />
             </ProForm>
-          </TabPrne> */}
+          </TabPane>
         </Tabs>
       </div>
       <DefaultFooter
@@ -186,6 +186,13 @@ const Login: React.FC<{ dispatch; user }> = ({ dispatch, user }) => {
             key: 'beian',
             title: '粤ICP备2021170738号-1',
             href: 'https://beian.miit.gov.cn/',
+            blankTarget: true,
+          },
+          {
+            key: 'beiangov',
+            title: '粤公网安备 44049102496838',
+            href:
+              'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44049102496838',
             blankTarget: true,
           },
         ]}
