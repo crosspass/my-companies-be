@@ -7,13 +7,13 @@ import * as echarts from 'echarts/core';
 
 import styles from '@/pages/index.less';
 
-export default function CashFlows({ cashFlows }) {
-  const annual_income = cashFlows.filter((cashflow) => {
-    return cashflow.ReportName.includes('年');
-  });
+export default function CashFlows({ cashFlows, filter }) {
   if (cashFlows.length == 0) {
     return null;
   }
+  const annual_income = cashFlows.filter((cashflow) => {
+    return cashflow.Category.includes(filter);
+  });
 
   const oaOption = {
     title: {

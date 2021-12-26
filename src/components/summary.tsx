@@ -20,6 +20,7 @@ import {
 } from 'echarts/renderers';
 
 import styles from '@/pages/index.less';
+import { getChartOptions } from '@/utils/dates';
 
 // Register the required components
 echarts.use([
@@ -32,61 +33,6 @@ echarts.use([
 ]);
 
 // The usage of ReactEChartsCore are same with above.
-
-function getChartOptions(
-  data: any,
-  filter: string,
-  title: string,
-  legends: Array<string>,
-  keys: Array<string>,
-) {
-  const filteredData = data.filter((summary) => {
-    return summary.Category.includes(filter);
-  });
-  let i = -1;
-  const series = legends.map((legend) => {
-    i += 1;
-    return {
-      name: legend,
-      type: 'line',
-      data: filteredData.map((v) => v[keys[i]]),
-    };
-  });
-
-  const options = {
-    title: {
-      text: title,
-      textStyle: {
-        fontWeight: 'normal',
-        fontSize: 16,
-      },
-    },
-    tooltip: {
-      trigger: 'axis',
-    },
-    legend: {
-      top: 40,
-      data: legends,
-    },
-    grid: {
-      top: 80,
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true,
-    },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: filteredData.map((v) => v.ReportName.substr(0, 4)),
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: series,
-  };
-  return options;
-}
 
 function TotalRevenue({ reportSummary, filter }) {
   const options = getChartOptions(
@@ -240,141 +186,47 @@ function OperationAbility({ reportSummary, filter }) {
   if (reportSummary.length == 0) {
     return null;
   }
-  const option = {
-    title: {
-      text: '周转天数',
-      textStyle: {
-        fontWeight: 'normal',
-        fontSize: 16,
-      },
-    },
-    tooltip: {
-      trigger: 'axis',
-    },
-    legend: {
-      top: 40,
-      data: [
-        '存货周转天数',
-        '应收账款周转天数',
-        '应付账款周转天数',
-        '现金循环周期',
-        '营业周期',
-      ],
-    },
-    grid: {
-      top: 80,
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true,
-    },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: annual_summary.map((v) => v.ReportName.substr(0, 4)),
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: [
-      {
-        name: '存货周转天数',
-        type: 'line',
-        data: annual_summary.map((v) => v.InventoryTurnoverDays),
-      },
-      {
-        name: '应收账款周转天数',
-        type: 'line',
-        data: annual_summary.map((v) => v.ReceivableTurnoverDays),
-      },
-      {
-        name: '应付账款周转天数',
-        type: 'line',
-        data: annual_summary.map((v) => v.AccountsPayableTurnoverDays),
-      },
-      {
-        name: '现金循环周期',
-        type: 'line',
-        data: annual_summary.map((v) => v.CashCycle),
-      },
-      {
-        name: '营业周期',
-        type: 'line',
-        data: annual_summary.map((v) => v.OperatingCycle),
-      },
+  const option = getChartOptions(
+    reportSummary,
+    filter,
+    '周转天数',
+    [
+      '存货周转天数',
+      '应收账款周转天数',
+      '应付账款周转天数',
+      '现金循环周期',
+      '营业周期',
     ],
-  };
+    [
+      'InventoryTurnoverDays',
+      'ReceivableTurnoverDays',
+      'AccountsPayableTurnoverDays',
+      'CashCycle',
+      'OperatingCycle',
+    ],
+  );
 
-  const cycleOption = {
-    title: {
-      text: '周转率',
-      textStyle: {
-        fontWeight: 'normal',
-        fontSize: 16,
-      },
-    },
-    tooltip: {
-      trigger: 'axis',
-    },
-    legend: {
-      top: 40,
-      data: [
-        '总资产周转率',
-        '存货周转率',
-        '应收账款周转率',
-        '应付账款周转率',
-        '流动资产周转率',
-        '固定资产周转率',
-      ],
-    },
-    grid: {
-      top: 80,
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true,
-    },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: annual_summary.map((v) => v.ReportName.substr(0, 4)),
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: [
-      {
-        name: '总资产周转率',
-        type: 'line',
-        data: annual_summary.map((v) => v.TotalCapitalTurnover),
-      },
-      {
-        name: '存货周转率',
-        type: 'line',
-        data: annual_summary.map((v) => v.InventoryTurnover),
-      },
-      {
-        name: '应收账款周转率',
-        type: 'line',
-        data: annual_summary.map((v) => v.AccountReceivableTurnover),
-      },
-      {
-        name: '应付账款周转率',
-        type: 'line',
-        data: annual_summary.map((v) => v.AccountsPayableTurnover),
-      },
-      {
-        name: '流动资产周转率',
-        type: 'line',
-        data: annual_summary.map((v) => v.CurrentAssetTurnoverRate),
-      },
-      {
-        name: '固定资产周转率',
-        type: 'line',
-        data: annual_summary.map((v) => v.FixedAssetTurnoverRatio),
-      },
+  const cycleOption = getChartOptions(
+    reportSummary,
+    filter,
+    '周转率',
+    [
+      '总资产周转率',
+      '存货周转率',
+      '应收账款周转率',
+      '应付账款周转率',
+      '流动资产周转率',
+      '固定资产周转率',
     ],
-  };
+    [
+      'TotalCapitalTurnover',
+      'InventoryTurnover',
+      'AccountReceivableTurnover',
+      'AccountsPayableTurnover',
+      'CurrentAssetTurnoverRate',
+      'FixedAssetTurnoverRatio',
+    ],
+  );
 
   return (
     <section className={styles.chart}>
@@ -405,103 +257,27 @@ function FinaRisk({ reportSummary, filter }) {
     return null;
   }
 
-  const assetLiabOption = {
-    title: {
-      text: '资产负债率',
-      textStyle: {
-        fontWeight: 'normal',
-        fontSize: 16,
-      },
-    },
-    tooltip: {
-      trigger: 'axis',
-    },
-    legend: {
-      top: 40,
-      data: ['资产负债率'],
-    },
-    grid: {
-      top: 80,
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true,
-    },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: annual_summary.map((v) => v.ReportName.substr(0, 4)),
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: [
-      {
-        name: '资产负债率',
-        type: 'line',
-        data: annual_summary.map((v) => v.AssetLiabRatio),
-      },
-    ],
-  };
+  const assetLiabOption = getChartOptions(
+    reportSummary,
+    filter,
+    '资产负债率',
+    ['资产负债率'],
+    ['AssetLiabRatio'],
+  );
 
-  const option = {
-    title: {
-      text: '财务风险',
-      textStyle: {
-        fontWeight: 'normal',
-        fontSize: 16,
-      },
-    },
-    tooltip: {
-      trigger: 'axis',
-    },
-    legend: {
-      top: 40,
-      data: ['流动比率', '速动比率', '权益乘数', '产权比率', '现金流量比率'],
-    },
-    grid: {
-      top: 80,
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true,
-    },
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: annual_summary.map((v) => v.ReportName.substr(0, 4)),
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: [
-      {
-        name: '流动比率',
-        type: 'line',
-        data: annual_summary.map((v) => v.CurrentRatio),
-      },
-      {
-        name: '速动比率',
-        type: 'line',
-        data: annual_summary.map((v) => v.QuickRatio),
-      },
-      {
-        name: '权益乘数',
-        type: 'line',
-        data: annual_summary.map((v) => v.EquityMultiplier),
-      },
-      {
-        name: '产权比率',
-        type: 'line',
-        data: annual_summary.map((v) => v.EquityRatio),
-      },
-      {
-        name: '现金流量比率',
-        type: 'line',
-        data: annual_summary.map((v) => v.NcfFromOaToTotalLiab),
-      },
+  const option = getChartOptions(
+    reportSummary,
+    filter,
+    '财务风险',
+    ['流动比率', '速动比率', '权益乘数', '产权比率', '现金流量比率'],
+    [
+      'CurrentRatio',
+      'QuickRatio',
+      'EquityMultiplier',
+      'EquityRatio',
+      'NcfFromOaToTotalLiab',
     ],
-  };
+  );
 
   return (
     <section className={styles.chart}>
