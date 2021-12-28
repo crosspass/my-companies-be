@@ -8,7 +8,7 @@ export default defineConfig({
     name: '公司财报跟踪',
   },
   routes: [
-    { path: '/', component: '@/pages/companies' },
+    { path: '/', redirect: '/companies' },
     { path: '/login', component: '@/pages/login' },
     { path: '/companies', component: '@/pages/companies', name: '关注的公司' },
     { path: '/articles', component: '@/pages/index', name: '我的投资笔记' },

@@ -64,7 +64,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
-        if (pathname === '/') {
+        if (pathname === '/articles') {
           const year = new Date().getFullYear();
           const payload = { page: 0, year: `${year}` };
           dispatch({ type: 'fetch', payload });
