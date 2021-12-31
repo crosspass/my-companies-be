@@ -1,4 +1,5 @@
 import { defineConfig } from 'umi';
+import MomentLocalesPlugin from 'moment-locales-webpack-plugin';
 
 export default defineConfig({
   nodeModulesTransform: {
@@ -41,5 +42,10 @@ export default defineConfig({
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
+  },
+  chainWebpack: (config, { webpack }) => {
+    config
+      .plugin('moment-locales')
+      .use(MomentLocalesPlugin, [{ localesToKeep: ['zh-cn'] }]);
   },
 });

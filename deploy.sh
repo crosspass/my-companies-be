@@ -18,4 +18,4 @@ tar -cvf dist.tar dist
 
 scp dist.tar rails:~/
 
-ssh rails "tar -xvf dist.tar;  mv /var/www/my-companies/dist /var/www/my-companies/$(date +%Y%m%d); mv dist /var/www/my-companies/"
+ssh rails "tar -xvf dist.tar;  mv /var/www/my-companies/dist /var/www/my-companies/$(date +%Y%m%d%H%M%S); mv dist /var/www/my-companies/"
