@@ -160,7 +160,7 @@ function ProfitAbility({ reportSummary, filter }) {
       'NetInterestOfTotalAssets',
       'Rop',
       'GrossSellingRate',
-      'NetSellingRate)',
+      'NetSellingRate',
     ],
   );
 

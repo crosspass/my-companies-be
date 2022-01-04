@@ -37,7 +37,6 @@ function getChartOptions(
   title: string,
   key: string,
 ) {
-  console.log('data', data);
   const legends = data.map((company: Array<any>) => {
     return company[0].Name;
   });
@@ -99,38 +98,22 @@ function getChartOptions(
   return options;
 }
 
-// The usage of ReactEChartsCore are same with above.
-function TotalRevenue({ stats, filter }) {
+function CommonChart({
+  stats,
+  filter,
+  title,
+  attr,
+}: {
+  stats: Array<any>;
+  filter: string;
+  title: string;
+  attr: string;
+}) {
   if (!stats) {
     return null;
   }
 
-  const options = getChartOptions(stats, filter, '营收', 'TotalRevenue');
-  return (
-    <section className={styles.chart}>
-      <ReactEChartsCore
-        className={styles.echarts}
-        echarts={echarts}
-        option={options}
-        notMerge={true}
-        lazyUpdate={true}
-      />
-    </section>
-  );
-}
-
-// The usage of ReactEChartsCore are same with above.
-function Net({ stats, filter }) {
-  if (!stats) {
-    return null;
-  }
-
-  const options = getChartOptions(
-    stats,
-    filter,
-    '扣非净利润',
-    'NetProfitAfterNrgalAtsolc',
-  );
+  const options = getChartOptions(stats, filter, title, attr);
   return (
     <section className={styles.chart}>
       <ReactEChartsCore
@@ -147,8 +130,102 @@ function Net({ stats, filter }) {
 export default function Charts({ stats, filter }) {
   return (
     <section className={styles.articleCard}>
-      <TotalRevenue stats={stats} filter={filter} />
-      <Net stats={stats} filter={filter} />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="营业收入"
+        attr="TotalRevenue"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="扣非净利润"
+        attr="NetProfitAfterNrgalAtsolc"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="销售毛利率"
+        attr="GrossSellingRate"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="销售净利率"
+        attr="NetSellingRate"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="净资产收益率"
+        attr="AvgRoe"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="总资产收益率"
+        attr="NetInterestOfTotalAssets"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="经营现金流入"
+        attr="CashReceivedOfSalesService"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="经营现金净流入"
+        attr="NcfFromOa"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="资产负债率"
+        attr="AssetLiabRatio"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="研发费用"
+        attr="RadCost"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="总资产周转率"
+        attr="TotalCapitalTurnover"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="存货周转率"
+        attr="InventoryTurnover"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="应收账款周转率"
+        attr="AccountReceivableTurnover"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="应付账款周转率"
+        attr="AccountsPayableTurnover"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="流动资产周转率"
+        attr="CurrentAssetTurnoverRate"
+      />
+      <CommonChart
+        stats={stats}
+        filter={filter}
+        title="固定资产周转率"
+        attr="FixedAssetTurnoverRatio"
+      />
     </section>
   );
 }
