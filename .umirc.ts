@@ -13,6 +13,8 @@ export default defineConfig({
     { path: '/login', component: '@/pages/login' },
     { path: '/companies', component: '@/pages/companies', name: '关注的公司' },
     { path: '/articles', component: '@/pages/index', name: '我的投资笔记' },
+    { path: '/businesses', component: '@/pages/businesses', name: '生意' },
+    { path: '/businesses/:id/stats', component: '@/pages/business/stats' },
     {
       path: '/companies/:code/csvs',
       component: '@/pages/company/csvs',

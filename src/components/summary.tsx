@@ -33,7 +33,6 @@ echarts.use([
 ]);
 
 // The usage of ReactEChartsCore are same with above.
-
 function TotalRevenue({ reportSummary, filter }) {
   const options = getChartOptions(
     reportSummary,
