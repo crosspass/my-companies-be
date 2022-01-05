@@ -46,8 +46,16 @@ function Month({
       orient: 'horizontal',
       left: 'center',
       top: 65,
+      pieces: [
+        { value: 0 },
+        { value: 1 },
+        { value: 2 },
+        { value: 3 },
+        { min: 4 },
+      ],
       inRange: {
         color: ['#feffe6', '#34ed44'],
+        // color: ['#ffffff', '#34ed44'],
       },
     },
     calendar: {
