@@ -1,4 +1,4 @@
-import * as companyService from '../services/business';
+import * as businessService from '../services/business';
 import pathToRegexp from 'path-to-regexp';
 
 // type interface Company {
@@ -22,9 +22,18 @@ export default {
         payload: { business },
       });
     },
+    *update({ payload }, { call, put }) {
+      const { business, message } = yield call(businessService.update, payload);
+      yield put({
+        type: 'updateBusiness',
+        payload: {
+          business,
+        },
+      });
+    },
     *fetchStats({ payload: id }, { call, put }) {
       const { business, stats, message } = yield call(
-        companyService.fetchBusinessStats,
+        businessService.fetchBusinessStats,
         id,
       );
       console.log('stats', stats);
@@ -40,7 +49,6 @@ export default {
         let match = pathToRegexp('/businesses/:id/stats').exec(pathname);
         if (match) {
           const id = match[1];
-          // dispatch({ type: 'fetch', payload: id });
           dispatch({ type: 'fetchStats', payload: id });
         }
         match = pathToRegexp('/businesses/:id/articles').exec(pathname);

@@ -2,6 +2,7 @@ import React from 'react';
 import { Select, Spin } from 'antd';
 import { SelectProps } from 'antd/es/select';
 import debounce from 'lodash/debounce';
+import _ from 'lodash';
 
 export interface DebounceSelectProps<ValueType = any>
   extends Omit<SelectProps<ValueType>, 'options' | 'children'> {
@@ -16,28 +17,35 @@ interface CompanyValue {
 }
 
 async function fetchCompanyList(key: string): Promise<CompanyValue[]> {
-  if (key=="") {
-    return []
+  if (key == '') {
+    return [];
   }
   console.log('fetching user', key);
   return fetch(`/api/company/search?key=${key}`)
-    .then(response => response.json())
-    .then(body =>
-      body.companies.map(
-        (company: { ID: number; Name: string }) => ({
-          label: company.Name,
-          value: company.ID,
-        }),
-      ),
+    .then((response) => response.json())
+    .then((body) =>
+      body.companies.map((company: { ID: number; Name: string }) => ({
+        label: company.Name,
+        value: company.ID,
+      })),
     );
 }
 
-
 function DebounceSelect<
-  ValueType extends { key?: string; label: React.ReactNode; value: string | number } = any
+  ValueType extends {
+    key?: string;
+    label: string;
+    value: string | number;
+  } = any
 >({ debounceTimeout = 800, initValues = [], ...props }: DebounceSelectProps) {
   const [fetching, setFetching] = React.useState(false);
-  const [options, setOptions] = React.useState<ValueType[]>([...initValues]);
+  const companyOptions = _.map(initValues, (v) => ({
+    label: v.Name,
+    value: v.ID,
+  }));
+  const [options, setOptions] = React.useState<Array<ValueType>>(
+    companyOptions,
+  );
   const fetchRef = React.useRef(0);
 
   const debounceFetcher = React.useMemo(() => {
@@ -46,12 +54,12 @@ function DebounceSelect<
       const fetchId = fetchRef.current;
       setFetching(true);
 
-      fetchCompanyList(value).then(newOptions => {
+      fetchCompanyList(value).then((newOptions) => {
         if (fetchId !== fetchRef.current) {
           // for fetch callback order
           return;
         }
-        setOptions([...initValues, ...newOptions]);
+        setOptions([...companyOptions, ...newOptions]);
         setFetching(false);
       });
     };
@@ -70,4 +78,4 @@ function DebounceSelect<
   );
 }
 
-export default DebounceSelect
+export default DebounceSelect;

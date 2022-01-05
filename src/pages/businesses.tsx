@@ -11,7 +11,7 @@ import {
   Row,
   Col,
 } from 'antd';
-import { EditTwoTone, FundTwoTone, HeartTwoTone } from '@ant-design/icons';
+import { EditTwoTone, FundTwoTone } from '@ant-design/icons';
 import { Popconfirm, Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { Drawer } from 'antd';
@@ -23,22 +23,14 @@ import styles from './index.less';
 import { PlusOutlined } from '@ant-design/icons';
 import CompanyQuery from '@/components/company_query';
 
+// 项目的目的： 提升个人投资者的价值投资能力
+// 生意页面的功能：对比公司的经营状况，筛选财务数据中的优等生
+
 // Usage of DebounceSelect
 interface UserValue {
   ID: number;
   Name: string;
 }
-
-// 项目的目的： 提升个人投资者的价值投资能力
-// 个人投资者真的知道企业的生意
-// 要求： 做笔记足够便捷
-// 记录点滴，集腋成裘
-// 首页展示什么？
-// 关注的企业的信息提醒？
-// 按照月度，显示写过的投资笔记?
-// 企业月度关键数据记录, 生成图表展示?
-// 跟踪企业的商业数据
-// 用户关注企业   用户  N: ----- :N 企业
 
 interface Business {
   ID: number;
@@ -51,30 +43,32 @@ interface Business {
 
 // 只能查看自己关注的企业图表信息，避免无意义的对比
 
-interface SearchFormProps {
+interface BusinessFormProps {
   visible: boolean;
+  initialValues: any;
   onClose: () => void;
   dispatch: (playload: any) => void;
 }
 
-const SearchForm: React.FC<SearchFormProps> = ({
+const BusinessForm: React.FC<BusinessFormProps> = ({
   visible,
+  initialValues,
   onClose,
   dispatch,
 }) => {
-  const [value, setValue] = React.useState<UserValue[]>([]);
-  const star = () => {
-    dispatch({
-      type: 'businesses/star',
-      payload: { id: value },
-    });
-  };
   const onFinish = (values: any) => {
-    dispatch({
-      type: 'businesses/create',
-      payload: values,
-    });
-    console.log('Success:', values);
+    if (initialValues.id) {
+      dispatch({
+        type: 'business/update',
+        payload: { id: initialValues.id, ...values },
+      });
+    } else {
+      dispatch({
+        type: 'businesses/create',
+        payload: values,
+      });
+    }
+    console.log('initialValues:', initialValues);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -92,10 +86,10 @@ const SearchForm: React.FC<SearchFormProps> = ({
         name="basic"
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 20 }}
-        initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
+        initialValues={initialValues}
       >
         <Form.Item
           label="名称"
@@ -118,13 +112,10 @@ const SearchForm: React.FC<SearchFormProps> = ({
         >
           <CompanyQuery
             showSearch
-            value={value}
             mode={'multiple'}
             placeholder="选择关联公司"
-            onChange={(newValue) => {
-              setValue(newValue);
-            }}
             style={{ width: '100%' }}
+            initValues={initialValues.companies}
           />
         </Form.Item>
 
@@ -140,6 +131,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
 function IndexPage({ businesses, dispatch }) {
   const [modalShow, setModalShow] = useState(false);
+  const [initialValues, setInitiaValues] = useState({});
   const BusinessCard = (business: Business) => {
     const confirm = () => {
       dispatch({
@@ -149,12 +141,24 @@ function IndexPage({ businesses, dispatch }) {
       message.info('删除文章成功！');
     };
 
+    const handleMenuClick = async (e) => {
+      if (e.key === 'edit') {
+        setInitiaValues({
+          id: business.ID,
+          name: business.Name,
+          description: business.Description,
+          companies: business.Companies,
+          company_ids: _.map(business.Companies, 'ID'),
+        });
+        setModalShow(true);
+        console.log('ok');
+      }
+    };
+
     const menu = (
-      <Menu>
-        <Menu.Item>
-          <Link to={`/businesses/${business.ID}/edit`}>编辑</Link>
-        </Menu.Item>
-        <Menu.Item danger>
+      <Menu onClick={handleMenuClick}>
+        <Menu.Item key="edit">编辑</Menu.Item>
+        <Menu.Item key="delete" danger>
           <Popconfirm
             title="你确定要删除这门生意？"
             onConfirm={confirm}
@@ -228,10 +232,11 @@ function IndexPage({ businesses, dispatch }) {
         icon={<PlusOutlined />}
         onClick={() => setModalShow(true)}
       />
-      <SearchForm
+      <BusinessForm
         visible={modalShow}
         onClose={() => setModalShow(false)}
         dispatch={dispatch}
+        initialValues={initialValues}
       />
     </div>
   );

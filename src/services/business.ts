@@ -17,6 +17,18 @@ export function create(values: {
   });
 }
 
+export function update(values: {
+  id: number;
+  name: string;
+  description: string;
+  company_ids: Array<any>;
+}) {
+  return request(`/api/businesses/${values.id}`, {
+    method: 'PUT',
+    body: JSON.stringify(values),
+  });
+}
+
 export function remove(id: number) {
   return request(`/api/companies/${id}`, {
     method: 'DELETE',
