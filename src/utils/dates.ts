@@ -85,7 +85,7 @@ export function getChartOptions(
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: filteredData.map((v) => v.ReportName.substr(0, 4)),
+      data: filteredData.map((v) => v.ReportName),
     },
     yAxis: {
       type: 'value',

@@ -104,9 +104,6 @@ function Page({ company }) {
     <div className={styles.mainContainer}>
       <Button onClick={() => setFilter('Q4')}>年度</Button>
       <Button onClick={() => setFilter('Q')}>季度</Button>
-      <Button onClick={() => setFilter('Q1')}>一季度</Button>
-      <Button onClick={() => setFilter('Q ')}>二季度</Button>
-      <Button onClick={() => setFilter('Q3')}>三季度</Button>
       <Summary summary={company.reportSummaries} filter={filter} />
       <Income incomes={company.incomes} filter={filter} />
       <CashFlow cashFlows={company.cashFlows} filter={filter} />
