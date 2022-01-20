@@ -92,7 +92,7 @@ function Increase({
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_summary.map((v) => v.ReportName.substr(0, 4)),
+      data: annual_summary.map((v) => v.ReportName),
     },
     yAxis: {
       type: 'value',

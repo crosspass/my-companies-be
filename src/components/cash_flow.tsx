@@ -49,7 +49,7 @@ export default function CashFlows({ cashFlows, filter }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_income.map((v) => v.ReportName.substr(0, 4)),
+      data: annual_income.map((v) => v.ReportName),
     },
     yAxis: {
       type: 'value',
@@ -134,7 +134,7 @@ export default function CashFlows({ cashFlows, filter }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_income.map((v) => v.ReportName.substr(0, 4)),
+      data: annual_income.map((v) => v.ReportName),
     },
     yAxis: {
       type: 'value',
@@ -227,7 +227,7 @@ export default function CashFlows({ cashFlows, filter }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_income.map((v) => v.ReportName.substr(0, 4)),
+      data: annual_income.map((v) => v.ReportName),
     },
     yAxis: {
       type: 'value',
@@ -301,7 +301,7 @@ export default function CashFlows({ cashFlows, filter }) {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: annual_income.map((v) => v.ReportName.substr(0, 4)),
+      data: annual_income.map((v) => v.ReportName),
     },
     yAxis: {
       type: 'value',
