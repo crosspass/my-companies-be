@@ -7,6 +7,7 @@ import {
 import { RequestOptionsInit } from 'umi-request';
 import { history, RequestConfig } from 'umi';
 import pathToRegexp from 'path-to-regexp';
+import { RollbackOutlined } from '@ant-design/icons';
 
 import RightContent from '@/components/headers/right_content';
 import * as userService from './services/user';
@@ -82,11 +83,19 @@ const HeaderContent: React.FC = ({ company }) => {
   let match = pathToRegexp('/companies/:code/:sub').exec(
     history.location.pathname,
   );
-  if (match && company && company.current) {
-    const { current } = company;
-    return <p>{current.Name}</p>;
+  //   if (match && company && company.current) {
+  //     const { current } = company;
+  //     return <p>{current.Name}<a onClick={() => history.goBack() }><RollbackOutlined /> </a>
+  // </p>;
+  //   }
+  if (history.location.pathname === '') {
+    return null;
   }
-  return null;
+  return (
+    <a onClick={() => history.goBack()}>
+      <RollbackOutlined />{' '}
+    </a>
+  );
 };
 
 function mapStateToProps(state, ownProps) {
