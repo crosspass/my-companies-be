@@ -22,15 +22,6 @@ export default {
         payload: { business },
       });
     },
-    *update({ payload }, { call, put }) {
-      const { business, message } = yield call(businessService.update, payload);
-      yield put({
-        type: 'updateBusiness',
-        payload: {
-          business,
-        },
-      });
-    },
     *fetchStats({ payload: id }, { call, put }) {
       const { business, stats, message } = yield call(
         businessService.fetchBusinessStats,

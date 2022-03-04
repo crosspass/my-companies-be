@@ -28,6 +28,13 @@ export default {
         },
       });
     },
+    *update({ payload }, { call, put }) {
+      const { business, message } = yield call(businessService.update, payload);
+      yield put({
+        type: 'updateBusiness',
+        payload: business,
+      });
+    },
   },
   subscriptions: {
     setup({ dispatch, history }) {
@@ -42,12 +49,15 @@ export default {
     fetchBusinesses(state, { payload }) {
       return { ...state, list: payload.businesses };
     },
-    starCompany(state, { payload }) {
-      if (_.find(state.list, { ID: payload.ID })) {
-        return state;
-      } else {
-        return { ...state, list: [...state.list, payload] };
-      }
+    addBusiness(state, { payload }) {
+      return { ...state, list: [...state.list, payload.business] };
+    },
+    updateBusiness(state, { payload }) {
+      const i = _.findIndex(state.list, (v) => v.ID == payload.ID);
+      return {
+        ...state,
+        list: [...state.list.slice(0, i), payload, ...state.list.slice(i + 1)],
+      };
     },
   },
 };

@@ -55,12 +55,14 @@ const BusinessForm: React.FC<BusinessFormProps> = ({
   initialValues,
   onClose,
   dispatch,
+  form,
 }) => {
+  console.log('companies form :', form.getFieldValue('companies'));
   const onFinish = (values: any) => {
-    if (initialValues.id) {
+    if (form.getFieldValue('id')) {
       dispatch({
-        type: 'business/update',
-        payload: { id: initialValues.id, ...values },
+        type: 'businesses/update',
+        payload: { id: form.getFieldValue('id'), ...values },
       });
     } else {
       dispatch({
@@ -68,22 +70,26 @@ const BusinessForm: React.FC<BusinessFormProps> = ({
         payload: values,
       });
     }
-    console.log('initialValues:', initialValues);
+    const msg = form.getFieldValue('id') ? '更新生意成功！' : '创建生意成功！';
+    message.info(msg);
+    onClose();
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+  const title = form.getFieldValue('id') ? '更新生意' : '创建生意';
   return (
     <Drawer
       visible={visible}
-      title="关注生意"
+      title={title}
       width={736}
       placement={'right'}
       onClose={onClose}
     >
       <Form
         name="basic"
+        form={form}
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 20 }}
         onFinish={onFinish}
@@ -115,13 +121,13 @@ const BusinessForm: React.FC<BusinessFormProps> = ({
             mode={'multiple'}
             placeholder="选择关联公司"
             style={{ width: '100%' }}
-            initValues={initialValues.companies}
+            initValues={form.getFieldValue('companies')}
           />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 4, span: 40 }}>
           <Button type="primary" htmlType="submit">
-            关注生意
+            {title}
           </Button>
         </Form.Item>
       </Form>
@@ -131,7 +137,8 @@ const BusinessForm: React.FC<BusinessFormProps> = ({
 
 function IndexPage({ businesses, dispatch }) {
   const [modalShow, setModalShow] = useState(false);
-  const [initialValues, setInitiaValues] = useState({});
+  const [form] = Form.useForm();
+
   const BusinessCard = (business: Business) => {
     const confirm = () => {
       dispatch({
@@ -143,7 +150,7 @@ function IndexPage({ businesses, dispatch }) {
 
     const handleMenuClick = async (e) => {
       if (e.key === 'edit') {
-        setInitiaValues({
+        form.setFieldsValue({
           id: business.ID,
           name: business.Name,
           description: business.Description,
@@ -213,6 +220,17 @@ function IndexPage({ businesses, dispatch }) {
     );
   };
 
+  const newBusiness = () => {
+    form.setFieldsValue({
+      id: undefined,
+      name: undefined,
+      description: undefined,
+      companies: [],
+      company_ids: [],
+    });
+    setModalShow(true);
+  };
+
   console.log('businesses', businesses);
   return (
     <div className={styles.mainContainer}>
@@ -230,13 +248,13 @@ function IndexPage({ businesses, dispatch }) {
         type="primary"
         shape="circle"
         icon={<PlusOutlined />}
-        onClick={() => setModalShow(true)}
+        onClick={newBusiness}
       />
       <BusinessForm
         visible={modalShow}
         onClose={() => setModalShow(false)}
         dispatch={dispatch}
-        initialValues={initialValues}
+        form={form}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Select, Spin } from 'antd';
 import { SelectProps } from 'antd/es/select';
 import debounce from 'lodash/debounce';
@@ -38,14 +38,23 @@ function DebounceSelect<
     value: string | number;
   } = any
 >({ debounceTimeout = 800, initValues = [], ...props }: DebounceSelectProps) {
-  const [fetching, setFetching] = React.useState(false);
-  const companyOptions = _.map(initValues, (v) => ({
+  const [fetching, setFetching] = useState(false);
+  let initOptions = _.map(initValues, (v) => ({
     label: v.Name,
     value: v.ID,
   }));
-  const [options, setOptions] = React.useState<Array<ValueType>>(
-    companyOptions,
+  const [oldOptions, setOldOptions] = React.useState<Array<ValueType>>(
+    initOptions,
   );
+  const [options, setOptions] = React.useState<Array<ValueType>>(initOptions);
+
+  useEffect(() => {
+    if (!_.isEqual(oldOptions, initOptions)) {
+      setOldOptions(initOptions);
+      setOptions(initOptions);
+    }
+  }, [initOptions]);
+
   const fetchRef = React.useRef(0);
 
   const debounceFetcher = React.useMemo(() => {
@@ -59,7 +68,7 @@ function DebounceSelect<
           // for fetch callback order
           return;
         }
-        setOptions([...companyOptions, ...newOptions]);
+        setOptions([...options, ...newOptions]);
         setFetching(false);
       });
     };
