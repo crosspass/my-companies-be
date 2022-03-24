@@ -1,42 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 
-// import the core library.
-import ReactEChartsCore from 'echarts-for-react/lib/core';
-// Import the echarts core module, which provides the necessary interfaces for using echarts.
-import * as echarts from 'echarts/core';
-// Import charts, all with Chart suffix
-import { LineChart } from 'echarts/charts';
-// import components, all suffixed with Component
-import {
-  GridComponent,
-  TooltipComponent,
-  TitleComponent,
-  LegendPlainComponent,
-} from 'echarts/components';
-// Import renderer, note that introducing the CanvasRenderer or SVGRenderer is a required step
-import {
-  CanvasRenderer,
-  // SVGRenderer,
-} from 'echarts/renderers';
-
-import { Modal, Button, Form, Input, Space } from 'antd';
+import { Modal, Button, Form, Input, Radio, Typography } from 'antd';
 
 import styles from '@/pages/index.less';
 import Income from '@/components/income';
 import Summary from '@/components/summary';
 import CashFlow from '@/components/cash_flow';
 import Balance from '@/components/balance';
-
-// Register the required components
-echarts.use([
-  TitleComponent,
-  TooltipComponent,
-  GridComponent,
-  LegendPlainComponent,
-  LineChart,
-  CanvasRenderer,
-]);
 
 const App = ({ dispatch, companyId, chart }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -84,26 +55,34 @@ const App = ({ dispatch, companyId, chart }) => {
   );
 };
 
+const filterOptions = [
+  { label: '年度', value: 'Q4' },
+  { label: '季度', value: 'Q' },
+];
+
 function Page({ company }) {
   console.log('company', company);
   const { current } = company;
-  if (!company) {
+  if (!company || !company.current) {
     return null;
   }
-  const getChartComments = (chartName: string) => {
-    if (company && company.Comments) {
-      return company.Comments.filter((v) => v.Chart == chartName);
-    } else {
-      return [];
-    }
-  };
 
   const [filter, setFilter] = useState('Q4');
 
+  const onChangeFilter = (e) => {
+    setFilter(e.target.value);
+  };
+
   return (
     <div className={styles.mainContainer}>
-      <Button onClick={() => setFilter('Q4')}>年度</Button>
-      <Button onClick={() => setFilter('Q')}>季度</Button>
+      <Typography.Title level={2}>{company.current.Name}</Typography.Title>
+      <Radio.Group
+        options={filterOptions}
+        onChange={onChangeFilter}
+        value={filter}
+        optionType="button"
+        buttonStyle="solid"
+      />
       <Summary summary={company.reportSummaries} filter={filter} />
       <Income incomes={company.incomes} filter={filter} />
       <CashFlow cashFlows={company.cashFlows} filter={filter} />
