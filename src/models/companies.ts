@@ -1,11 +1,11 @@
-import * as companyService from '../services/company'
-import * as userService from '../services/user'
-import _ from "lodash"
+import * as companyService from '../services/company';
+import * as userService from '../services/user';
+import _ from 'lodash';
 
 export default {
   namespace: 'companies',
   state: {
-    list: []
+    list: [],
   },
   effects: {
     *fetch({ payload: { page = 1 } }, { call, put }) {
@@ -14,7 +14,7 @@ export default {
         type: 'fetchCompanies',
         payload: {
           companies,
-          page: page
+          page: page,
         },
       });
     },
@@ -22,7 +22,17 @@ export default {
       const { company, message } = yield call(userService.starCompany, payload);
       yield put({
         type: 'starCompany',
-        payload: company
+        payload: company,
+      });
+    },
+    *unstar({ payload }, { call, put }) {
+      const { company, message } = yield call(
+        userService.unStarCompany,
+        payload,
+      );
+      yield put({
+        type: 'unStarCompany',
+        payload: company,
       });
     },
   },
@@ -40,11 +50,14 @@ export default {
       return { ...state, list: payload.companies };
     },
     starCompany(state, { payload }) {
-      if (_.find(state.list, {ID: payload.ID })) {
-        return state
+      if (_.find(state.list, { ID: payload.ID })) {
+        return state;
       } else {
         return { ...state, list: [...state.list, payload] };
       }
     },
+    unStarCompany(state, { payload }) {
+      return { ...state, list: _.reject(state.list, { ID: payload.ID }) };
+    },
   },
-}
+};

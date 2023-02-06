@@ -1,14 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { Button, Card, message, List, Space, Tooltip, Row, Col, } from 'antd';
+import { Button, Card, message, List, Space, Tooltip, Row, Col } from 'antd';
 import { EditTwoTone, FundTwoTone, HeartTwoTone } from '@ant-design/icons';
-
 
 import { history, Link } from 'umi';
 import { connect } from 'dva';
 
 import styles from './index.less';
 import { PlusOutlined } from '@ant-design/icons';
-import CompanyQuery from "@/components/company_query"
+import CompanyQuery from '@/components/company_query';
 
 // Usage of DebounceSelect
 interface UserValue {
@@ -28,11 +27,11 @@ interface UserValue {
 // 用户关注企业   用户  N: ----- :N 企业
 
 interface Company {
-  ID: number,
-  Name: string,
-  Code: string,
-  ArticleCount: number,
-  CsvCount: number,
+  ID: number;
+  Name: string;
+  Code: string;
+  ArticleCount: number;
+  CsvCount: number;
 }
 
 // 只能查看自己关注的企业图表信息，避免无意义的对比
@@ -53,10 +52,10 @@ const SearchForm: React.FC<SearchFormProps> = ({
   const [value, setValue] = React.useState<UserValue[]>([]);
   const star = () => {
     dispatch({
-      type: "companies/star",
-      payload: { id: value }
-    })
-  }
+      type: 'companies/star',
+      payload: { id: value },
+    });
+  };
   return (
     <Drawer
       visible={visible}
@@ -70,40 +69,54 @@ const SearchForm: React.FC<SearchFormProps> = ({
             showSearch
             value={value}
             placeholder="选择关联公司"
-            onChange={newValue => {
+            onChange={(newValue) => {
               setValue(newValue);
             }}
             style={{ width: '100%' }}
           />
         </Col>
         <Col span={4}>
-          <Button type="primary" htmlType="submit" className={styles.lM1} onClick={star}>关注</Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className={styles.lM1}
+            onClick={star}
+          >
+            关注
+          </Button>
         </Col>
       </Row>
-    </Drawer >
+    </Drawer>
   );
 };
 
 function IndexPage({ companies, dispatch }) {
-  const [modalShow, setModalShow] = useState(false)
+  const [modalShow, setModalShow] = useState(false);
   const CompanyCard = (company: Company) => {
-    const confirm = () => {
+    const unstar = () => {
+      message.info('unstar');
       dispatch({
-        type: 'companies/unflow',
-        payload: company.ID
-      })
-      message.info('取消关注成功！')
-    }
-    const ctitle = `${company.Name} (${company.Code})`
+        type: 'companies/unstar',
+        payload: { id: company.ID },
+      });
+    };
+    const ctitle = `${company.Name} (${company.Code})`;
     return (
       <List.Item>
-        <Card title={<Link to={`/companies/${company.Code}/finances`}>{ctitle} </Link>} extra={<HeartTwoTone twoToneColor="#eb2f96" />}>
+        <Card
+          title={
+            <Link to={`/companies/${company.Code}/finances`}>{ctitle} </Link>
+          }
+          extra={<HeartTwoTone twoToneColor="#eb2f96" onClick={unstar} />}
+        >
           <Row gutter={16}>
             <Col span={12}>
               <Space>
                 <EditTwoTone />
                 <Tooltip title="笔记数量">
-                  <Link to={`/companies/${company.Code}/articles`}>{company.ArticleCount}</Link>
+                  <Link to={`/companies/${company.Code}/articles`}>
+                    {company.ArticleCount}
+                  </Link>
                 </Tooltip>
               </Space>
             </Col>
@@ -111,17 +124,19 @@ function IndexPage({ companies, dispatch }) {
               <Space>
                 <FundTwoTone />
                 <Tooltip title="跟踪数据">
-                  <Link to={`/companies/${company.Code}/csvs`}>{company.CsvCount}</Link>
+                  <Link to={`/companies/${company.Code}/csvs`}>
+                    {company.CsvCount}
+                  </Link>
                 </Tooltip>
               </Space>
             </Col>
           </Row>
         </Card>
       </List.Item>
-    )
-  }
+    );
+  };
 
-  console.log("companies", companies)
+  console.log('companies', companies);
   return (
     <div className={styles.mainContainer}>
       {/* 关注所有的公司 */}
@@ -131,18 +146,27 @@ function IndexPage({ companies, dispatch }) {
           size="large"
           dataSource={companies.list}
           renderItem={CompanyCard}
-        >
-        </List>
+        ></List>
       </section>
-      <Button className={styles.addBtn} type="primary" shape="circle" icon={<PlusOutlined />} onClick={() => setModalShow(true)} />
-      <SearchForm visible={modalShow} onClose={() => setModalShow(false)} dispatch={dispatch} />
-    </div >
+      <Button
+        className={styles.addBtn}
+        type="primary"
+        shape="circle"
+        icon={<PlusOutlined />}
+        onClick={() => setModalShow(true)}
+      />
+      <SearchForm
+        visible={modalShow}
+        onClose={() => setModalShow(false)}
+        dispatch={dispatch}
+      />
+    </div>
   );
 }
 
 function mapStateToProps(state) {
   return {
-    companies: state.companies
+    companies: state.companies,
   };
 }
 
